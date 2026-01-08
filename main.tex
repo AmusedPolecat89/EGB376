@@ -1,0 +1,1031 @@
+%========================================================================================
+%   PREAMBLE: PACKAGES AND DOCUMENT SETUP
+%========================================================================================
+
+\documentclass[11pt, a4paper]{article}
+
+%----------------------------------------------------------------------------------------
+%   CORE PACKAGES
+%----------------------------------------------------------------------------------------
+
+\usepackage{amsmath}        % For advanced math environments (align, etc.)
+\usepackage{amssymb}        % For math symbols (e.g., \le)
+\usepackage{xcolor}         % For defining and using colors
+\usepackage{hyperref}       % For creating clickable links (e.g., in the ToC)
+\usepackage{pifont}         % For Zapf Dingbats symbols, like arrows
+
+%----------------------------------------------------------------------------------------
+%   PAGE LAYOUT & APPEARANCE
+%----------------------------------------------------------------------------------------
+
+\usepackage[a4paper, margin=0.8in, headheight=15pt]{geometry} % Sets page margins
+\usepackage[most]{tcolorbox}                                 % The core package for all colored boxes
+\usepackage{fancyhdr}                                        % For creating custom headers and footers
+\usepackage{lastpage}                                        % Required for "Page X of Y" footer format
+\usepackage{tabularx}                                        % For tables with auto-wrapping text columns
+
+%----------------------------------------------------------------------------------------
+%   HYPERLINK SETUP
+%----------------------------------------------------------------------------------------
+
+\hypersetup{
+    colorlinks=true,       % Enables colored links instead of boxes
+    linkcolor=teal,        % Color for internal links (e.g., Table of Contents)
+    urlcolor=teal,         % Color for external URLs
+    pdftitle={Ultimate Steel Design Workflow}, % PDF metadata
+    pdfauthor={Your Name}, % PDF metadata
+}
+
+%----------------------------------------------------------------------------------------
+%   CUSTOM TCOLORBOX STYLES
+%----------------------------------------------------------------------------------------
+
+% Box for high-level strategic advice
+\newtcolorbox{strategybox}{
+    colback=gray!5!white,
+    colframe=gray!60!black,
+    fonttitle=\bfseries,
+    title=Strategy
+}
+
+% Box for critical decision points in the workflow
+\newtcolorbox{decisionbox}{
+    colback=green!5!white,
+    colframe=green!50!black,
+    fonttitle=\bfseries,
+    title=DECISION POINT
+}
+
+% Box for important notes, warnings, and common pitfalls
+\newtcolorbox{notebox}{
+    colback=yellow!10!white,
+    colframe=yellow!80!black,
+    fonttitle=\bfseries,
+    title=Important Note
+}
+
+% Box for final answers, themed with a custom color
+\newtcolorbox{finalbox}[2][]{
+    colback=#2!5!white,
+    colframe=#2!75!black,
+    fonttitle=\bfseries,
+    title=Final Answer Check,
+    #1
+}
+
+%----------------------------------------------------------------------------------------
+%   CUSTOM HEADER AND FOOTER SETUP
+%----------------------------------------------------------------------------------------
+
+\pagestyle{fancy}                       % Activates the fancy page style
+\fancyhf{}                              % Clears all existing header and footer fields
+\fancyhead[L]{Ultimate Steel Design: A Decision-Based Workflow (AS 4100)} % Left-aligned header
+\fancyfoot[C]{\thepage\ of \pageref{LastPage}} % Centered footer: "Page X of Y"
+\renewcommand{\headrulewidth}{0.4pt}    % Adds a rule line below the header
+\renewcommand{\footrulewidth}{0.4pt}    % Adds a rule line above the footer
+
+%----------------------------------------------------------------------------------------
+%   DOCUMENT INFORMATION (FOR TITLE PAGE)
+%----------------------------------------------------------------------------------------
+
+\title{\bfseries \Huge The Ultimate Steel Design Workflow \\ \large A Decision-Based Guide for AS 4100}
+\author{Your Name | EGB376 - Steel Structures} % Replace with your details
+\date{} % Suppresses the date from being displayed
+
+%========================================================================================
+%   END OF PREAMBLE
+%========================================================================================
+
+
+%========================================================================================
+%   BEGIN DOCUMENT
+%========================================================================================
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%   TITLE PAGE
+%----------------------------------------------------------------------------------------
+\maketitle
+\thispagestyle{fancy} % Apply the custom header/footer to the title page
+\hrule
+\vspace{1em}
+This document is an interactive, step-by-step procedure to solve steel design problems according to AS 4100. It is designed as a plug-and-play checklist for open-book assessments. Start every problem with the Master Decision Tree in Section 2.
+\vspace{1em}
+\tableofcontents
+
+\newpage
+
+%----------------------------------------------------------------------------------------
+%   SECTION 1: FUNDAMENTALS & FIRST STEPS
+%----------------------------------------------------------------------------------------
+
+\section*{How to Use This Document}
+\begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, fonttitle=\bfseries, title=Your Problem-Solving Process]
+For every exam question, follow this exact procedure:
+\begin{enumerate}
+    \item \textbf{Start at the Master Decision Tree (Section 2).} Answer the questions to identify the correct workflow for your problem.
+    \item \textbf{Go to the indicated workflow section.}
+    \item \textbf{Follow the steps and decision points within that workflow.} Fill in the blanks as you go.
+    \item This process ensures you never miss a critical check.
+\end{enumerate}
+\end{tcolorbox}
+
+
+\section{Fundamentals of Limit States Design}
+
+\begin{strategybox}
+Structural design ensures safety against uncertain loads and material strengths. Limit States Design manages this uncertainty using two key safety factors:
+\begin{enumerate}
+    \item \textbf{Load Factors ($\gamma$):} We \textbf{increase} the specified loads (G, Q, W) to get a conservative "Design Action Effect" ($S^*$). This accounts for potential \textbf{overloading}.
+    \item \textbf{Capacity Reduction Factors ($\phi$):} We \textbf{decrease} the theoretical strength of a member to get a "Design Capacity" ($\phi R$). This accounts for potential \textbf{under-strength} and variability.
+\end{enumerate}
+The structure is safe if the factored action is less than or equal to the factored capacity.
+\end{strategybox}
+
+\subsection*{The Core Design Equation}
+\begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, sharp corners, center]
+\Huge $S^* \le \phi R$
+\end{tcolorbox}
+
+\subsection{Step 1 of Every Problem: Calculate the Design Action Effect ($S^*$)}
+Before using any workflow, you must determine the target load ($N^*, M^*, V^*$) your member needs to resist. This is calculated from the nominal loads given in the question using the appropriate load combinations.
+
+\subsubsection{Strength Limit State Load Combinations (AS/NZS 1170.0)}
+\begin{notebox}
+For any strength problem (checking capacity for yielding, fracture, buckling), you must test all relevant load combinations and use the one that produces the \textbf{WORST} (i.e., largest) design action effect.
+\end{notebox}
+\begin{itemize}
+    \item \textbf{For Downward Gravity Loads (most common case):}
+        \[ S^* = 1.2G + 1.5Q \]
+        Where: $G$ = Permanent Action (Dead Load), $Q$ = Imposed Action (Live Load).
+
+    \item \textbf{For Wind Uplift or Reversal (when wind opposes gravity):}
+        \[ S^* = 0.9G + W_u \]
+        Where: $W_u$ = Ultimate Wind Action.
+
+    \item \textbf{For Stability (checking against overturning or sliding):}
+        \[ S^* = 1.35G \]
+        
+    \item \textbf{For Gravity with Wind (downwards):}
+        \[ S^* = 1.2G + W_u + \psi_c Q \]
+        Where $\psi_c$ is the combination factor for the imposed action.
+\end{itemize}
+
+\subsubsection{Serviceability Limit State (Checks for Deflection, Vibration)}
+\begin{notebox}
+Serviceability is about performance and comfort, not collapse. We use \textbf{unfactored} (or service) loads because we are checking behaviour under normal, everyday conditions.
+\end{notebox}
+\begin{itemize}
+    \item \textbf{Short-Term Effects (e.g., immediate deflection):}
+        \[ S_{ser} = G + \psi_s Q \]
+    \item \textbf{Long-Term Effects (e.g., creep, settlement):}
+        \[ S_{ser} = G + \psi_l Q \]
+    \item The short-term ($\psi_s$) and long-term ($\psi_l$) factors are found in \textbf{Table 4.1 of AS/NZS 1170.0}. They depend on the use of the structure (e.g., residential, storage).
+\end{itemize}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 1
+%========================================================================================
+
+%========================================================================================
+%   SECTION 2: MASTER DECISION TREE
+%========================================================================================
+
+\section{Master Decision Tree: START EVERY PROBLEM HERE}
+
+\begin{strategybox}
+Every steel design problem can be categorized by the primary actions on the member and the limit state being checked. This decision tree is a triage system. Read the exam question carefully, then answer the questions below to find the exact workflow you need to solve it.
+\end{strategybox}
+
+\begin{decisionbox}
+\textbf{1. What is the PRIMARY action the member is designed for?}
+
+\begin{itemize}
+    \item \textbf{IF} the member is primarily resisting \textbf{Axial Tension} (being pulled apart by a force $N^*$), and the question asks for its design capacity...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 3: Tension System Workflow}
+        \end{itemize}
+
+    \item \textbf{IF} the member is primarily resisting \textbf{Axial Compression} (a column being squashed by a force $N^*$), and the question asks for its design capacity...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 4: Compression Member Workflow}
+        \end{itemize}
+
+    \item \textbf{IF} the member is primarily resisting \textbf{Bending} (a beam supporting transverse loads, creating a moment $M^*$), and the question asks for its capacity or adequacy...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 5: Flexural System (Beam) Workflow}
+        \end{itemize}
+
+    \item \textbf{IF} the member is resisting both \textbf{Axial Compression AND Bending} simultaneously (a beam-column with forces $N^*$ and $M^*$), and the question asks for its adequacy...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 6: Combined Actions (Beam-Column) Workflow}
+        \end{itemize}
+\end{itemize}
+
+\vspace{1em}\hrule\vspace{1em}
+
+\textbf{2. Is the question ONLY about a complex connection detail?}
+
+\begin{itemize}
+    \item \textbf{IF} the question shows a bracket or plate eccentrically \textbf{welded} to a column and asks for the adequacy of the weld...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 7: Advanced Connection --- Eccentric Welds}
+        \end{itemize}
+
+    \item \textbf{IF} the question shows a \textbf{bolted} connection resisting pure Tension ($N_{tf}^*$) or a combination of Tension and Shear ($N_{tf}^*$ and $V_f^*$), and asks for the adequacy of the bolts...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Go to Section 8: Advanced Connection --- Bolts in Tension \& Combined Action}
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 2
+%========================================================================================
+
+%========================================================================================
+%   SECTION 3: TENSION SYSTEM WORKFLOW
+%========================================================================================
+
+\section{Tension System Workflow ($N^* \le \phi N_{system}$)}
+
+\begin{strategybox}
+A tension system can fail in two places: in the main body of the member, or at the connection. The true capacity of the system is the \textbf{weakest link} in this chain. This workflow ensures you check all possible failure modes for both the member and its connection to find the governing capacity.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: MEMBER CAPACITY
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Member Capacity Checks}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Setup \& Data Extraction]
+    \begin{itemize}
+        \item \textbf{Member/Grade:} \underline{\hspace{8cm}}
+        \item \textbf{Properties from Tables (AS 4100 \& Steel Handbook):}
+        \begin{itemize}
+            \item Capacity Factor (Yielding \& Fracture) $\phi = 0.9$ (Table 3.4)
+            \item Yield Stress $f_y = \underline{\hspace{2cm}}$ MPa (Table 2.1)
+            \item Ultimate Tensile Strength $f_u = \underline{\hspace{2cm}}$ MPa (Table 2.1)
+            \item Gross Area $A_g$ (of one section) = \underline{\hspace{2cm}} mm$^2$
+            \item Thickness of connected part $t = \underline{\hspace{2cm}}$ mm
+        \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+
+\subsubsection*{CHECK 1: Gross Section Yielding (Clause 7.2)}
+\begin{itemize}
+    \item \textbf{Purpose:} Checks for ductile stretching of the member away from connections.
+    \item \textbf{Formula:} $\phi N_y = \phi A_g f_y$
+    \item \textbf{Calculation:}
+        \begin{align*}
+            \phi N_y &= (0.9) \times (\underline{\hspace{3cm}}\,\text{mm}^2) \times (\underline{\hspace{2cm}}\,\text{MPa}) \\
+            &= \underline{\hspace{4cm}}\,\text{kN} \quad \rightarrow \quad \textbf{(Result T1)}
+        \end{align*}
+\end{itemize}
+
+\hrule\vspace{1em}
+
+\subsubsection*{CHECK 2: Net Section Fracture (Clause 7.2)}
+\begin{itemize}
+    \item \textbf{Purpose:} Checks for brittle failure at the weakened cross-section through bolt holes.
+    \item \textbf{Formula:} $\phi N_u = \phi \times k_t \times A_n \times f_u$
+    \item \textbf{Step a) Calculate Net Area ($A_n$):}
+        \begin{notebox}
+        \textbf{Common Pitfall:} Always use the diameter of the \textbf{hole}, not the bolt. \\
+        Hole Diameter ($d_h$) = Bolt Diameter ($d_f$) + 2 mm (for bolts up to M24).
+        \end{notebox}
+        \begin{itemize}
+            \item Bolt $d_f = \underline{\hspace{1.5cm}}$ mm $\implies$ Hole $d_h = \underline{\hspace{1.5cm}}$ mm
+            \item $A_n = A_g - (\text{No. holes in cross-section}) \times d_h \times t = \underline{\hspace{2cm}}$ mm$^2$
+            \item \textit{For staggered connections (check all paths):} $A_n = A_g - n(d_h t) + \sum \frac{s_p^2 t}{4s_g}$
+        \end{itemize}
+    \item \textbf{Step b) Determine Correction Factor ($k_t$) (Table 7.3.2):}
+        \begin{itemize}
+            \item Selected $k_t = \underline{\hspace{2cm}}$ (e.g., 1.0 for plates, 0.85 for angles)
+        \end{itemize}
+    \item \textbf{Step c) Calculate Fracture Capacity:}
+        \begin{align*}
+            \phi N_u &= (0.9) \times (\underline{\hspace{1cm}}) \times (\underline{\hspace{2cm}}\,\text{mm}^2) \times (\underline{\hspace{2cm}}\,\text{MPa}) \\
+            &= \underline{\hspace{4cm}}\,\text{kN} \quad \rightarrow \quad \textbf{(Result T2)}
+        \end{align*}
+\end{itemize}
+\begin{tcolorbox}[colback=blue!5, colframe=blue!75, title=\textbf{Member Capacity Result}]
+    The governing capacity of the member itself is $\phi N_{member} = \min(\text{Result T1, Result T2}) = \underline{\hspace{3cm}}$ kN.
+\end{tcolorbox}
+
+%----------------------------------------------------------------------------------------
+%   PART B: CONNECTION CAPACITY
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Connection Capacity Checks}
+
+\begin{decisionbox}
+\textbf{What type of connection is used in the problem?}
+\begin{itemize}
+    \item \textbf{IF} the members are joined using \textbf{bolts}...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Proceed to Part B1: Bolted Connection Checks}
+        \end{itemize}
+    \item \textbf{IF} the members are joined using \textbf{welds}...
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Proceed to Part B2: Welded Connection Checks}
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\subsubsection*{Part B1: Bolted Connection Checks}
+\begin{itemize}
+    \item \textbf{CHECK 3: Bolt Shear Capacity ($\phi V_f$)} (Clause 9.3.2.1)
+        \begin{itemize}
+            \item \textbf{Formula:} $\phi V_f = \phi (0.62 f_{uf} A_{eff} k_r)$
+            \item Capacity of one bolt in shear = $\underline{\hspace{2cm}}$ kN
+            \item Total bolt shear capacity = (Capacity of one bolt) $\times$ (No. shear planes) $\times$ (No. bolts)
+            \item Total $\phi V_{f,total} = \underline{\hspace{3cm}}$ kN $\quad \rightarrow \quad \textbf{(Result BC1)}$
+        \end{itemize}
+    \item \textbf{CHECK 4: Ply Bearing Capacity ($\phi V_b$)} (Clause 9.3.2.4)
+        \begin{itemize}
+            \item \textbf{Formula:} $V_b = \min(3.2 d_f t_p f_{up}, \ a_e t_p f_{up})$
+            \item $V_b$ per bolt in weakest ply = $\underline{\hspace{2cm}}$ kN
+            \item Total ply bearing capacity = ($V_b$ per bolt) $\times$ (No. bolts)
+            \item Total $\phi V_{b,total} = 0.9 \times V_{b,total} = \underline{\hspace{3cm}}$ kN $\quad \rightarrow \quad \textbf{(Result BC2)}$
+        \end{itemize}
+    \item \textbf{CHECK 5: Block Shear Capacity ($\phi V_{bs}$)} (Clause 9.3.3)
+        \begin{itemize}
+            \item \textbf{Formula:} $\phi V_{bs} = \phi \times \min[ (0.6 f_u A_{nv} + f_y A_{gt}), (0.6 f_y A_{gv} + f_u A_{nt}) ]$
+            \item $\phi = 0.9$ (for connections)
+            \item $\phi V_{bs} = \underline{\hspace{3cm}}$ kN $\quad \rightarrow \quad \textbf{(Result BC3)}$
+        \end{itemize}
+\end{itemize}
+\begin{tcolorbox}[colback=violet!5, colframe=violet!75, title=\textbf{Bolted Connection Capacity Result}]
+    The governing capacity of the bolted connection is $\phi N_{conn} = \min(\text{Result BC1, BC2, BC3}) = \underline{\hspace{3cm}}$ kN.
+\end{tcolorbox}
+
+
+\subsubsection*{Part B2: Welded Connection Checks}
+\begin{itemize}
+    \item \textbf{CHECK 3: Weld Group Capacity ($\phi N_w$)} (Clause 9.7)
+        \begin{itemize}
+            \item \textbf{Formula:} $\phi N_w = \phi \times (0.6 f_{uw} t_t) \times L_{total}$
+            \item Weld throat thickness $t_t = 0.707 \times t_{w,leg} = \underline{\hspace{2cm}}$ mm
+            \item Total length of weld $L_{total} = \underline{\hspace{2cm}}$ mm
+            \item Capacity factor for weld $\phi = \underline{\hspace{1cm}}$ (e.g., 0.8 for SP)
+            \item $\phi N_w = \underline{\hspace{3cm}}$ kN $\quad \rightarrow \quad \textbf{(Result W1)}$
+        \end{itemize}
+    \item \textbf{CHECK 4: Parent Metal Capacity}
+        \begin{itemize}
+            \item The connection is also limited by the strength of the material next to the weld. This is typically the Gross Section Yielding of the connected plate.
+            \item Parent Metal Capacity = (Result T1 from Part A) = $\underline{\hspace{3cm}}$ kN $\quad \rightarrow \quad \textbf{(Result W2)}$
+        \end{itemize}
+\end{itemize}
+\begin{tcolorbox}[colback=teal!5, colframe=teal!75, title=\textbf{Welded Connection Capacity Result}]
+    The governing capacity of the welded connection is $\phi N_{conn} = \min(\text{Result W1, W2}) = \underline{\hspace{3cm}}$ kN.
+\end{tcolorbox}
+
+%----------------------------------------------------------------------------------------
+%   PART C: FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+
+\subsection{Part C: Final Conclusion for the Tension System}
+\begin{finalbox}{blue}
+To find the design capacity of the entire system, compare the governing member capacity (Part A) with the governing connection capacity (Part B). The weakest link governs.
+\begin{itemize}
+    \item Governing Member Capacity ($\phi N_{member}$) = \underline{\hspace{3cm}} kN
+    \item Governing Connection Capacity ($\phi N_{conn}$) = \underline{\hspace{3cm}} kN
+\end{itemize}
+\textbf{The Design Capacity of the Tension System is $\phi N_{system} = \min(\phi N_{member}, \phi N_{conn}) = \underline{\hspace{4cm}}$ kN.}
+\end{finalbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 3
+%========================================================================================
+
+%========================================================================================
+%   SECTION 4: COMPRESSION MEMBER WORKFLOW
+%========================================================================================
+
+\section{Compression Member Workflow ($N^* \le \phi N_c$)}
+
+\begin{strategybox}
+A compression member (column) can fail in two distinct ways. A short, stocky column will crush under load (\textbf{Section Capacity}). A long, slender column will bend and buckle sideways before it reaches its crush strength (\textbf{Member Capacity}). The design capacity is always the \textbf{LOWER} of these two values.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: SECTION CAPACITY (CRUSHING)
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Section Capacity Check ($\phi N_s$)}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Setup \& Data Extraction]
+    \begin{itemize}
+        \item \textbf{Member/Grade:} \underline{\hspace{8cm}}
+        \item \textbf{Properties from Tables (AS 4100 \& Steel Handbook):}
+        \begin{itemize}
+            \item Capacity Factor (Compression) $\phi = 0.9$ (Table 3.4)
+            \item Yield Stress $f_y = \underline{\hspace{2cm}}$ MPa
+            \item Net Area $A_n = \underline{\hspace{2cm}}$ mm$^2$ (For members without holes, $A_n = A_g$)
+            \item Form Factor $k_f = \underline{\hspace{2cm}}$ (Clause 6.2.2 - this is 1.0 for compact sections)
+            \item Radii of Gyration: $r_x = \underline{\hspace{2cm}}$ mm, $r_y = \underline{\hspace{2cm}}$ mm
+            \item Member Length $L = \underline{\hspace{2cm}}$ mm
+        \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+
+\subsubsection*{CHECK 1: Section Capacity (Yielding/Crushing) (Clause 6.2.1)}
+\begin{itemize}
+    \item \textbf{Purpose:} Calculates the "squash load" of the cross-section, assuming it does not buckle.
+    \item \textbf{Formula:} $\phi N_s = \phi k_f A_n f_y$
+    \item \textbf{Calculation:}
+        \begin{align*}
+            \phi N_s &= (0.9) \times (k_f = \underline{\hspace{1.5cm}}) \times (A_n = \underline{\hspace{2.5cm}}\,\text{mm}^2) \times (f_y = \underline{\hspace{2cm}}\,\text{MPa}) \\
+            &= \underline{\hspace{4cm}} \text{ kN} \quad \rightarrow \quad \textbf{(Result C1)}
+        \end{align*}
+\end{itemize}
+\begin{notebox}
+This value, `Result C1`, is the maximum possible compression capacity. The member buckling check in Part B will determine how much this capacity is reduced by slenderness. The nominal section capacity, $N_s = k_f A_n f_y$, will be used in the next part.
+\end{notebox}
+
+%----------------------------------------------------------------------------------------
+%   PART B: MEMBER CAPACITY (BUCKLING)
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Member Capacity Check ($\phi N_c$)}
+
+\begin{decisionbox}
+\textbf{Step 1: Determine the Governing Buckling Axis.} \\
+A column always buckles about its most slender axis. Calculate the slenderness ratio ($l_e/r$) for both axes. The \textbf{LARGER} slenderness ratio governs the design.
+\begin{itemize}
+    \item \textbf{Effective Length Factors ($k_e$) from Table 4.6.3.1:}
+        \begin{itemize}
+            \item For x-axis buckling: $k_{ex} = \underline{\hspace{1.5cm}}$
+            \item For y-axis buckling: $k_{ey} = \underline{\hspace{1.5cm}}$
+        \end{itemize}
+    \item \textbf{Effective Lengths ($l_e = k_e L$):}
+        \begin{itemize}
+            \item $l_{ex} = k_{ex} L = (\underline{\hspace{1.5cm}}) \times (\underline{\hspace{2cm}}) = \underline{\hspace{2.5cm}}$ mm
+            \item $l_{ey} = k_{ey} L = (\underline{\hspace{1.5cm}}) \times (\underline{\hspace{2cm}}) = \underline{\hspace{2.5cm}}$ mm
+        \end{itemize}
+    \item \textbf{Slenderness Ratios ($l_e/r$):}
+        \begin{itemize}
+            \item x-axis: $l_{ex}/r_x = (\underline{\hspace{2.5cm}}) / (\underline{\hspace{2cm}}) = \underline{\hspace{2cm}}$
+            \item y-axis: $l_{ey}/r_y = (\underline{\hspace{2.5cm}}) / (\underline{\hspace{2cm}}) = \underline{\hspace{2cm}}$
+        \end{itemize}
+\end{itemize}
+\textbf{The governing (larger) slenderness ratio is \underline{\hspace{2.5cm}}. Use the corresponding $l_e$ and $r$ values for all subsequent calculations.}
+\end{decisionbox}
+
+\subsubsection*{CHECK 2: Member Capacity (Buckling) (Clause 6.3.3)}
+\begin{itemize}
+    \item \textbf{Step a) Calculate Modified Member Slenderness ($\lambda_n$):}
+        \[ \lambda_n = \frac{l_e}{r} \sqrt{k_f} \sqrt{\frac{f_y}{250}} = \left(\frac{\underline{\hspace{2.5cm}}}{\underline{\hspace{2.5cm}}}\right) \sqrt{\underline{\hspace{1cm}}} \sqrt{\frac{\underline{\hspace{1.5cm}}}{250}} = \underline{\hspace{2.5cm}} \]
+    
+    \item \textbf{Step b) Calculate Slenderness Reduction Factor ($\alpha_c$):}
+        \begin{notebox}
+        This is the critical step that accounts for buckling. It requires finding the member section constant ($\alpha_b$) first.
+        \end{notebox}
+        \begin{itemize}
+            \item Look up Member Section Constant ($\alpha_b$) from \textbf{Table 6.3.3(1)} based on the member type and buckling axis. $\alpha_b = \underline{\hspace{1.5cm}}$
+            \item Calculate intermediate factor $\eta$ (eta):
+                \[ \eta = 0.00326 (\lambda_n - 13.5) = 0.00326 (\underline{\hspace{2cm}} - 13.5) = \underline{\hspace{2.5cm}} \quad (\text{Note: } \eta \ge 0) \]
+            \item Calculate intermediate factor $\xi$ (xi):
+                \[ \xi = \frac{(\lambda_n/90)^2 + 1 + \eta}{2(\lambda_n/90)^2} = \underline{\hspace{2.5cm}} \]
+            \item Calculate $\alpha_c$ using the formula from Clause 6.3.3:
+                \[ \alpha_c = \xi \left[ 1 - \sqrt{1 - \left(\frac{90}{\xi \lambda_n}\right)^2} \right] = \underline{\hspace{2.5cm}} \]
+        \end{itemize}
+    \item \textbf{Step c) Calculate Member Buckling Capacity:}
+        \begin{align*}
+            \phi N_c &= \phi \alpha_c N_s = (0.9) \times (\alpha_c) \times (N_s \text{ from Part A}) \\
+            &= (0.9) \times (\underline{\hspace{1.5cm}}) \times (\underline{\hspace{2.5cm}}\,\text{kN}) \\
+            &= \underline{\hspace{4cm}} \text{ kN} \quad \rightarrow \quad \textbf{(Result C2)}
+        \end{align*}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART C: FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+\subsection{Part C: Final Conclusion for the Compression Member}
+\begin{finalbox}{red}
+The design compression capacity is the lesser of the section (crushing) capacity and the member (buckling) capacity.
+\begin{itemize}
+    \item Section Capacity ($\phi N_s$) = \textbf{Result C1} = \underline{\hspace{3cm}} kN
+    \item Member Capacity ($\phi N_c$) = \textbf{Result C2} = \underline{\hspace{3cm}} kN
+\end{itemize}
+\textbf{The Design Capacity of the Compression Member is $\phi N_c = \min(\phi N_s, \phi N_c) = \underline{\hspace{4cm}}$ kN.}
+\end{finalbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 4
+%========================================================================================
+
+%========================================================================================
+%   SECTION 5: FLEXURAL SYSTEM (BEAM) WORKFLOW
+%========================================================================================
+
+\section{Flexural System (Beam) Workflow}
+
+\begin{strategybox}
+A beam must be checked for three primary failure modes:
+\begin{enumerate}
+    \item \textbf{Bending Capacity ($M^*$ vs $\phi M_b$):} Does the beam have enough strength to resist the maximum moment? This can be limited by either the cross-section's strength or by overall buckling (LTB).
+    \item \textbf{Shear Capacity ($V^*$ vs $\phi V_u$):} Is the web strong enough to resist being sliced, typically near the supports?
+    \item \textbf{Web Bearing/Buckling ($R^*$ vs $\phi R_b$):} Can the web handle concentrated forces from supports or point loads without crushing or buckling locally?
+\end{enumerate}
+This workflow will guide you through all necessary checks.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: BENDING CAPACITY
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Bending Capacity Check ($M^* \le \phi M_b$)}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Setup \& Data Extraction]
+    \begin{itemize}
+        \item \textbf{Member/Grade:} \underline{\hspace{8cm}}
+        \item \textbf{Span ($L_{span}$) \& Bracing Details:} \underline{\hspace{6cm}}
+        \item \textbf{Properties from Tables (AS 4100 \& Steel Handbook):}
+        \begin{itemize}
+            \item Capacity Factor (Bending) $\phi = 0.9$
+            \item Yield Stress $f_y = \underline{\hspace{2cm}}$ MPa
+            \item Plastic Section Modulus $S_x = \underline{\hspace{2cm}}$ mm$^3$
+            \item Effective Section Modulus $Z_{ex} = \underline{\hspace{2cm}}$ mm$^3$
+            \item Properties for LTB calc: $I_y, J, I_w$
+        \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+
+\begin{decisionbox}
+\textbf{Step 1: Determine the Section Moment Capacity ($M_s$) by checking for COMPACTNESS.} \\
+Check the plate slenderness ($\lambda_e$) for the flange and web against the plasticity limit ($\lambda_{ep}$) from Table 5.2.
+
+\begin{itemize}
+    \item \textbf{IF the section is COMPACT} (all elements meet $\lambda_{ep}$ limits)...
+        \begin{itemize}
+            \item The section can reach its full plastic moment. Use the \textbf{Plastic Section Modulus ($S_x$)}.
+            \item Nominal Section Capacity: $M_s = f_y S_x = \underline{\hspace{4cm}}$ kNm.
+        \end{itemize}
+    \item \textbf{IF the section is NON-COMPACT} (any element fails $\lambda_{ep}$ but passes $\lambda_{ey}$)...
+        \begin{itemize}
+            \item The section capacity is limited by local buckling. Use the \textbf{Effective Section Modulus ($Z_{ex}$)}.
+            \item Nominal Section Capacity: $M_s = f_y Z_{ex} = \underline{\hspace{4cm}}$ kNm.
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\begin{decisionbox}
+\textbf{Step 2: Check for Lateral Torsional Buckling (LTB).} \\
+Is the beam segment under consideration \textbf{fully braced} against sideways movement and twisting?
+
+\begin{itemize}
+    \item \textbf{IF YES (Fully Braced):} The member cannot buckle. The design capacity is the design section capacity.
+        \begin{itemize}
+            \item \textbf{Design Bending Capacity $\phi M_b = \phi M_s = \underline{\hspace{4cm}}$ kNm.}
+            \item[\ding{226}] \textbf{Bending check is complete. Proceed to Part B: Shear Capacity.}
+        \end{itemize}
+    \item \textbf{IF NO (Unbraced or Partially Braced):} The member can buckle. The capacity must be reduced for LTB.
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Proceed to Step 3: LTB Calculation.}
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\subsubsection*{Step 3: LTB Calculation for Unbraced Beams (Clause 5.6)}
+\begin{itemize}
+    \item \textbf{a) Determine Effective Length ($l_e$):} $l_e = k_t k_l k_r L$. Use Tables 5.6.3(1-3).
+        \begin{itemize}
+            \item $L$ (length between braces) = $\underline{\hspace{2cm}}$ mm. $l_e = \underline{\hspace{3cm}}$ mm.
+        \end{itemize}
+    \item \textbf{b) Calculate Elastic Buckling Moment ($M_{oa}$):} (Clause 5.6.1.1)
+        \[ M_{oa} = \sqrt{\left(\frac{\pi^2 E I_y}{l_e^2}\right) \left( G J + \frac{\pi^2 E I_w}{l_e^2} \right)} = \underline{\hspace{3cm}} \text{ kNm} \]
+    \item \textbf{c) Calculate Slenderness Reduction Factor ($\alpha_s$):}
+        \[ \alpha_s = 0.6 \left[ \sqrt{\left(\frac{M_s}{M_{oa}}\right)^2 + 3} - \frac{M_s}{M_{oa}} \right] = \underline{\hspace{2.5cm}} \]
+    \item \textbf{d) Determine Moment Modification Factor ($\alpha_m$):} (Table 5.6.1)
+        \begin{itemize}
+            \item Based on the moment diagram shape between braces. $\alpha_m = \underline{\hspace{1.5cm}}$
+        \end{itemize}
+    \item \textbf{e) Calculate Member Bending Capacity ($\phi M_b$):}
+        \begin{align*}
+            \phi M_b &= \phi \alpha_m \alpha_s M_s \\
+            &= (0.9) \times (\underline{\hspace{1.5cm}}) \times (\underline{\hspace{1.5cm}}) \times (\underline{\hspace{2.5cm}}\,\text{kNm}) \\
+            &= \underline{\hspace{4cm}} \text{ kNm}
+        \end{align*}
+\end{itemize}
+\begin{tcolorbox}[colback=green!5, colframe=green!75, title=\textbf{Bending Capacity Result}]
+    The governing Design Bending Capacity is $\phi M_b = \underline{\hspace{3cm}}$ kNm.
+\end{tcolorbox}
+
+\newpage
+%----------------------------------------------------------------------------------------
+%   PART B: SHEAR CAPACITY
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Shear Capacity Check ($V^* \le \phi V_u$)}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Data Extraction for Shear]
+\begin{itemize}
+    \item Web Yield Stress $f_{yw} = \underline{\hspace{2cm}}$ MPa
+    \item Web depth (clear of fillets) $d_1 = \underline{\hspace{2cm}}$ mm
+    \item Web thickness $t_w = \underline{\hspace{2cm}}$ mm
+\end{itemize}
+\end{tcolorbox}
+
+\begin{decisionbox}
+\textbf{Does the web require a shear buckling check?} \\
+A thin web may buckle before it yields. Check the slenderness ratio: Is $\frac{d_1}{t_w} \le \frac{82}{\sqrt{f_{yw} / 250}}$?
+\begin{itemize}
+    \item Web slenderness $\frac{d_1}{t_w} = \underline{\hspace{2cm}}$. Limit = $\underline{\hspace{2cm}}$.
+\end{itemize}
+\begin{itemize}
+    \item \textbf{IF NO (Ratio is greater than limit):} The web is slender and will buckle.
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Proceed to the Shear Buckling calculation below.}
+        \end{itemize}
+    \item \textbf{IF YES (Ratio is less than or equal to limit):} The web is stocky and will yield.
+        \begin{itemize}
+            \item Shear Area $A_w \approx d \times t_w = \underline{\hspace{2.5cm}}$ mm$^2$.
+            \item Nominal Shear Yield Capacity $V_u = V_v = 0.6 f_{yw} A_w = \underline{\hspace{3cm}}$ kN.
+            \item \textbf{Design Shear Capacity $\phi V_u = 0.9 \times V_v = \underline{\hspace{3cm}}$ kN.}
+            \item[\ding{226}] \textbf{Shear check is complete.}
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\subsubsection*{Shear Buckling Calculation (Clause 5.11.3)}
+\begin{itemize}
+    \item Shear Yield Capacity (from above) $V_v = \underline{\hspace{3cm}}$ kN.
+    \item Shear Buckling Factor $\alpha_v = \left[ \frac{82}{(d_1/t_w)\sqrt{f_{yw}/250}} \right]^2 = \underline{\hspace{2.5cm}}$.
+    \item Nominal Shear Buckling Capacity $V_u = V_b = \alpha_v V_v = \underline{\hspace{3cm}}$ kN.
+    \item \textbf{Design Shear Capacity $\phi V_u = 0.9 \times V_b = \underline{\hspace{3cm}}$ kN.}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART C: WEB BEARING / BUCKLING
+%----------------------------------------------------------------------------------------
+\subsection{Part C: Local Web Checks at Supports/Point Loads ($R^* \le \phi R_b$)}
+\begin{itemize}
+    \item \textbf{CHECK 1: Web Bearing (Yielding) Capacity (Clause 5.13.3)}
+        \begin{itemize}
+            \item Effective bearing width $b_{bf} = b_s + 5t_f = \underline{\hspace{2.5cm}}$ mm
+            \item $\phi R_{by} = 0.9 \times (1.25 b_{bf} t_w f_{yw}) = \underline{\hspace{3cm}}$ kN
+        \end{itemize}
+    \item \textbf{CHECK 2: Web Buckling Capacity (Clause 5.13.4)}
+        \begin{itemize}
+             \item $\phi R_{bb} = 0.9 \times (\alpha_c (1.25 b_{bf} t_w f_{yw}))$
+             \item Where $\alpha_c$ is calculated for a strut of length $d_1$.
+        \end{itemize}
+\end{itemize}
+\begin{notebox}
+For most problems, Web Bearing (Yielding) is the main check required unless the web is very slender or the bearing length $b_s$ is very small.
+\end{notebox}
+
+%----------------------------------------------------------------------------------------
+%   FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+\subsection{Final Conclusion for the Flexural System}
+\begin{finalbox}{green}
+To be adequate, the beam must satisfy all relevant checks.
+\begin{itemize}
+    \item Bending Check: $M^* = \underline{\hspace{2cm}}$ kNm $\le \phi M_b = \underline{\hspace{2cm}}$ kNm \quad (\textbf{PASS / FAIL})
+    \item Shear Check: $V^* = \underline{\hspace{2cm}}$ kN $\le \phi V_u = \underline{\hspace{2cm}}$ kN \quad (\textbf{PASS / FAIL})
+    \item Web Bearing Check: $R^* = \underline{\hspace{2cm}}$ kN $\le \phi R_{by} = \underline{\hspace{2cm}}$ kN \quad (\textbf{PASS / FAIL})
+\end{itemize}
+\textbf{Overall Conclusion: The beam \underline{IS / IS NOT} adequate.}
+\end{finalbox}
+
+\newpage
+%========================================================================================
+%   END OF SECTION 5
+%========================================================================================
+
+%========================================================================================
+%   SECTION 6: COMBINED ACTIONS (BEAM-COLUMN) WORKFLOW
+%========================================================================================
+
+\section{Combined Actions (Beam-Column) Workflow}
+
+\begin{strategybox}
+A beam-column is a member subjected to both axial compression ($N^*$) and bending ($M^*$) at the same time. These actions interact and reduce the member's capacity. We cannot simply check them in isolation ($N^* \le \phi N_c$ and $M^* \le \phi M_b$). Instead, we must use \textbf{interaction equations} to check that the combined effect is safe. There are two levels to this check:
+\begin{enumerate}
+    \item \textbf{Section Capacity:} Checks for yielding of the cross-section at a specific point.
+    \item \textbf{Member Capacity:} Checks for overall member failure, including the interaction between column buckling and beam LTB.
+\end{enumerate}
+Both checks must be satisfied for the member to be adequate.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: SETUP & CAPACITY GATHERING
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Setup \& Prerequisite Capacities}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Data Extraction]
+    \begin{itemize}
+        \item \textbf{Member/Grade:} \underline{\hspace{8cm}}
+        \item \textbf{Design Actions at critical location:}
+            \begin{itemize}
+                \item Design Axial Force $N^* = \underline{\hspace{2.5cm}}$ kN
+                \item Design Bending Moment (major x-axis) $M_x^* = \underline{\hspace{2.5cm}}$ kNm
+                \item Design Bending Moment (minor y-axis) $M_y^* = \underline{\hspace{2.5cm}}$ kNm
+            \end{itemize}
+        \item \textbf{Required Capacities (Calculated from Section 4 \& 5 Workflows):}
+            \begin{itemize}
+                \item Design Section Compression Capacity $\phi N_s = \underline{\hspace{2cm}}$ kN
+                \item Design Member Comp. Capacity (re: x-axis) $\phi N_{cx} = \underline{\hspace{2cm}}$ kN
+                \item Design Member Comp. Capacity (re: y-axis) $\phi N_{cy} = \underline{\hspace{2cm}}$ kN
+                \item Design Section Moment Capacity $\phi M_{sx} = \underline{\hspace{2cm}}$ kNm
+                \item Design Member Moment Capacity $\phi M_{bx} = \underline{\hspace{2cm}}$ kNm
+            \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+\begin{notebox}
+Before you can perform a combined actions check, you MUST have the individual design capacities for pure compression and pure bending. If these are not given, you must calculate them using the workflows in Section 4 and Section 5 first.
+\end{notebox}
+
+%----------------------------------------------------------------------------------------
+%   PART B: COMBINED STRENGTH CHECKS
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Combined Strength Interaction Checks}
+
+\subsubsection*{CHECK 1: Section Capacity (Yielding) (Clause 8.3)}
+\begin{itemize}
+    \item \textbf{Purpose:} Checks for failure of the cross-section at a braced point of maximum moment and axial force.
+    \item \textbf{Step a) Calculate Reduced Moment Capacity ($M_r$):}
+        \begin{itemize}
+            \item This is the section's moment capacity, reduced by the presence of the axial load.
+            \item \textbf{Formula (uniaxial bending):} $M_{rx} = M_{sx} (1 - N^*/N_s)$
+            \item $M_{rx} = (\underline{\hspace{2cm}}\,\text{kNm}) \times (1 - \frac{\underline{\hspace{2cm}}\,\text{kN}}{\underline{\hspace{2cm}}\,\text{kN}}) = \underline{\hspace{3cm}}$ kNm
+        \end{itemize}
+    \item \textbf{Step b) Perform the Interaction Check:}
+        \begin{itemize}
+            \item \textbf{Formula:} $\frac{M_x^*}{\phi M_{rx}} \le 1.0$
+            \item $\frac{\underline{\hspace{2.5cm}}\,\text{kNm}}{0.9 \times \underline{\hspace{2.5cm}}\,\text{kNm}} = \underline{\hspace{2.5cm}}$
+        \end{itemize}
+\end{itemize}
+\begin{tcolorbox}[colback=yellow!10!white, colframe=yellow!80!black, fonttitle=\bfseries]
+    \textbf{Section Capacity Check Result:} Is the Interaction Value $\le 1.0$? \quad \textbf{\underline{YES / NO}}
+\end{tcolorbox}
+
+\hrule\vspace{1em}
+\subsubsection*{CHECK 2: Member Capacity (Buckling) (Clause 8.4)}
+\begin{itemize}
+    \item \textbf{Purpose:} Checks for overall member failure, combining column buckling with beam buckling (LTB). For I-sections, the out-of-plane check is often critical.
+\end{itemize}
+\begin{decisionbox}
+\textbf{Which Member Capacity check is required?} \\
+The standard specifies checks for in-plane, out-of-plane, and biaxial bending. For a typical exam problem involving an I-section bent about its major axis, the **Out-of-Plane** check is usually the governing one.
+
+\begin{itemize}
+    \item \textbf{IF the beam-column is bent about its major axis (x-axis)...}
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Perform the Out-of-Plane Capacity Check (Clause 8.4.4.1)}
+        \end{itemize}
+    \item \textbf{IF the beam-column is bent about its minor axis (y-axis)...}
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Perform the In-Plane Capacity Check (Clause 8.4.2.2)}
+        \end{itemize}
+\end{itemize}
+\end{decisionbox}
+
+\paragraph{Out-of-Plane Member Capacity Check (Clause 8.4.4.1):}
+\begin{itemize}
+    \item \textbf{Interaction Formula:} $\left( \frac{M_x^*}{\phi M_{bx}} \right)^2 + \left( \frac{N^*}{\phi N_{cy}} \right)^2 \le 1.0$
+    \item \textbf{Calculation:}
+        \begin{align*}
+            \text{Moment Ratio} &= \frac{M_x^*}{\phi M_{bx}} = \frac{\underline{\hspace{2.5cm}}}{\underline{\hspace{2.5cm}}} = \underline{\hspace{2.5cm}} \\
+            \text{Compression Ratio} &= \frac{N^*}{\phi N_{cy}} = \frac{\underline{\hspace{2.5cm}}}{\underline{\hspace{2.5cm}}} = \underline{\hspace{2.5cm}} \\
+            \text{Interaction Value} &= (\text{Moment Ratio})^2 + (\text{Compression Ratio})^2 \\
+            &= (\underline{\hspace{2cm}})^2 + (\underline{\hspace{2cm}})^2 = \underline{\hspace{2.5cm}}
+        \end{align*}
+\end{itemize}
+\begin{tcolorbox}[colback=yellow!10!white, colframe=yellow!80!black, fonttitle=\bfseries]
+    \textbf{Out-of-Plane Member Check Result:} Is the Interaction Value $\le 1.0$? \quad \textbf{\underline{YES / NO}}
+\end{tcolorbox}
+
+%----------------------------------------------------------------------------------------
+%   PART C: FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+\subsection{Part C: Final Conclusion for the Beam-Column}
+\begin{finalbox}{purple}
+To be adequate, a beam-column must satisfy \textbf{ALL} applicable combined action checks.
+\begin{itemize}
+    \item Section Capacity Check: \textbf{\underline{PASS / FAIL}}
+    \item Member Capacity Check: \textbf{\underline{PASS / FAIL}}
+\end{itemize}
+\textbf{Overall Conclusion: The member \underline{IS / IS NOT} adequate for the combined actions.}
+\end{finalbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 6
+%========================================================================================
+
+%========================================================================================
+%   SECTION 7: ADVANCED CONNECTION --- ECCENTRIC WELDS
+%========================================================================================
+
+\section{Advanced Connection: Eccentric Welds Workflow}
+
+\begin{strategybox}
+An eccentric load on a weld group creates two effects: a direct shear force that is distributed evenly, and a torque (moment) that creates shear forces that are highest at the points farthest from the group's center. We cannot simply add these forces. We must treat them as vectors and find the resultant force at the most critical point. The weld is adequate if this maximum resultant force (per unit length) is less than the weld's design capacity.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: WELD GROUP PROPERTIES & CAPACITY
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Weld Group Properties \& Capacity}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Setup \& Data Extraction]
+    \begin{itemize}
+        \item \textbf{Weld Details:} \underline{\hspace{2cm}} mm \underline{\hspace{2cm}} (SP/GP) Fillet Welds
+        \item \textbf{Load Details:} Design Shear Force $V^* = \underline{\hspace{2cm}}$ kN, Eccentricity $e = \underline{\hspace{2cm}}$ mm
+        \item \textbf{Weld Metal Strength} $f_{uw} = \underline{\hspace{2cm}}$ MPa (e.g., 490 MPa for E49XX)
+        \item \textbf{Capacity Factor $\phi$}: \underline{\hspace{1cm}} (e.g., 0.8 for SP, 0.6 for GP)
+    \end{itemize}
+\end{tcolorbox}
+
+\subsubsection*{Step 1: Calculate the Design Weld Capacity per mm ($\phi v_w$)}
+\begin{itemize}
+    \item \textbf{Formula:} $\phi v_w = \phi \times (0.6 f_{uw} t_t)$
+    \item Throat Thickness $t_t = 0.707 \times (\text{leg size}) = 0.707 \times (\underline{\hspace{1.5cm}}) = \underline{\hspace{2cm}}$ mm
+    \item $\phi v_w = (\underline{\hspace{0.5cm}}) \times (0.6) \times (\underline{\hspace{1.5cm}}\,\text{MPa}) \times (\underline{\hspace{1.5cm}}\,\text{mm}) = \underline{\hspace{3cm}}$ N/mm
+\end{itemize}
+
+\subsubsection*{Step 2: Calculate Weld Group Geometric Properties}
+\begin{itemize}
+    \item \textbf{a) Find the Centroid of the Weld Group ($\bar{x}, \bar{y}$):}
+    \begin{itemize}
+        \item Treat the welds as lines. Find the centroid using the formula $\bar{x} = \frac{\sum L_i x_i}{\sum L_i}$.
+        \item Total Length of Weld $L_{total} = \underline{\hspace{2.5cm}}$ mm
+        \item Centroid coordinates: $\bar{x} = \underline{\hspace{2cm}}$ mm, $\bar{y} = \underline{\hspace{2cm}}$ mm
+    \end{itemize}
+    \item \textbf{b) Calculate the Polar Moment of Inertia ($I_p$):}
+    \begin{itemize}
+        \item $I_p = I_x + I_y$ for the weld group about its centroid.
+        \item $I_x = \sum (I_{xc} + A d_y^2)$, where $I_{xc}$ is the inertia of each weld line about its own centroid and $A d_y^2$ is from the parallel axis theorem. For a vertical line, $I_{xc} = L^3/12$. For a horizontal line, $I_{xc} \approx 0$.
+        \item $I_x = \underline{\hspace{3cm}}$ mm$^3$
+        \item $I_y = \underline{\hspace{3cm}}$ mm$^3$
+        \item $I_p = I_x + I_y = \underline{\hspace{4cm}}$ mm$^3$
+    \end{itemize}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART B: FORCE ANALYSIS AT CRITICAL POINT
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Force Analysis at the Critical Point}
+\begin{notebox}
+The critical point is almost always one of the corners of the weld group, farthest from the centroid, where the torsional shear will be at its maximum.
+\end{notebox}
+
+\subsubsection*{Step 3: Calculate the Design Actions on the Weld Group}
+\begin{itemize}
+    \item \textbf{Direct Shear Force (Vertical):} $V^* = \underline{\hspace{3cm}}$ N
+    \item \textbf{Design Torque:} $T^* = V^* \times e = (\underline{\hspace{2cm}}\,\text{N}) \times (\underline{\hspace{2cm}}\,\text{mm}) = \underline{\hspace{4cm}}$ Nmm
+\end{itemize}
+
+\subsubsection*{Step 4: Calculate Force Components per mm at the Critical Point}
+\begin{itemize}
+    \item \textbf{a) Direct Shear Component ($v_v^*$):}
+        \begin{itemize}
+            \item This force acts in the same direction as the applied load ($V^*$).
+            \item $v_{v,y}^* = \frac{V^*}{L_{total}} = \frac{\underline{\hspace{3cm}}\,\text{N}}{\underline{\hspace{3cm}}\,\text{mm}} = \underline{\hspace{3cm}}$ N/mm (acting downwards)
+            \item $v_{v,x}^* = 0$ N/mm
+        \end{itemize}
+    \item \textbf{b) Torsional Shear Components ($v_t^*$):}
+        \begin{itemize}
+            \item This force acts perpendicular to a line drawn from the centroid to the critical point.
+            \item Coordinates of critical point relative to centroid: $r_x = \underline{\hspace{1.5cm}}$ mm, $r_y = \underline{\hspace{1.5cm}}$ mm
+            \item Horizontal component of torsional shear: $v_{t,x}^* = \frac{T^* \times r_y}{I_p} = \frac{(\underline{\hspace{3cm}})(\underline{\hspace{1.5cm}})}{\underline{\hspace{4cm}}} = \underline{\hspace{3cm}}$ N/mm
+            \item Vertical component of torsional shear: $v_{t,y}^* = \frac{T^* \times r_x}{I_p} = \frac{(\underline{\hspace{3cm}})(\underline{\hspace{1.5cm}})}{\underline{\hspace{4cm}}} = \underline{\hspace{3cm}}$ N/mm
+        \end{itemize}
+\end{itemize}
+
+\subsubsection*{Step 5: Calculate the Resultant Force per mm ($v_{res}^*$)}
+\begin{itemize}
+    \item Combine the components vectorially. Pay close attention to directions (e.g., direct shear is down, torsional shear might be up or down).
+    \item Total Vertical Force: $v_{total, y}^* = v_{v,y}^* + v_{t,y}^* = \underline{\hspace{2cm}} + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
+    \item Total Horizontal Force: $v_{total, x}^* = v_{v,x}^* + v_{t,x}^* = 0 + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
+    \item \textbf{Resultant Force:} $v_{res}^* = \sqrt{(v_{total, x}^*)^2 + (v_{total, y}^*)^2} = \underline{\hspace{3cm}}$ N/mm
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART C: FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+
+\subsection{Part C: Final Conclusion for the Eccentric Weld}
+\begin{finalbox}{teal}
+The weld group is adequate if the maximum resultant force per unit length is less than the design capacity of the weld per unit length.
+\begin{itemize}
+    \item Maximum Resultant Force ($v_{res}^*$) = \underline{\hspace{3cm}} N/mm
+    \item Design Weld Capacity ($\phi v_w$) = \underline{\hspace{3cm}} N/mm
+\end{itemize}
+\textbf{Check: Is $v_{res}^* \le \phi v_w$? \quad \underline{YES / NO}} \\
+\textbf{Conclusion: The eccentric weld group \underline{IS / IS NOT} adequate.}
+\end{finalbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 7
+%========================================================================================
+
+%========================================================================================
+%   SECTION 8: ADVANCED CONNECTION --- BOLTS IN COMBINED ACTION
+%========================================================================================
+
+\section{Advanced Connection: Bolts in Combined Shear \& Tension}
+
+\begin{strategybox}
+Many connections, such as fin plates or brackets, subject bolts to a combination of shear ($V_f^*$) and tension ($N_{tf}^*$) simultaneously. Neither the pure shear capacity nor the pure tension capacity is sufficient on its own. We must use an \textbf{interaction formula} to check that the combined effect of these two actions is acceptable for the most critically loaded bolt.
+\end{strategybox}
+
+%----------------------------------------------------------------------------------------
+%   PART A: SETUP & INDIVIDUAL CAPACITIES
+%----------------------------------------------------------------------------------------
+
+\subsection{Part A: Setup \& Individual Bolt Capacities}
+\begin{tcolorbox}[colback=gray!5,colframe=gray!50,title=Phase 1: Data Extraction]
+    \begin{itemize}
+        \item \textbf{Bolt Details:} \underline{\hspace{2cm}} Grade \underline{\hspace{1.5cm}}, Diameter $d_f = \underline{\hspace{1cm}}$ mm
+        \item \textbf{Connection Details:} Threads are \underline{Included / Excluded} from the shear plane.
+        \item \textbf{Design Actions on the MOST CRITICAL BOLT:}
+            \begin{itemize}
+                \item Design Shear Force per bolt $V_f^* = \underline{\hspace{2.5cm}}$ kN
+                \item Design Tension Force per bolt $N_{tf}^* = \underline{\hspace{2.5cm}}$ kN
+            \end{itemize}
+        \item \textbf{Properties from Tables (AS 4100 \& Steel Handbook):}
+            \begin{itemize}
+                \item Capacity Factor (Bolts) $\phi = 0.8$ (Table 3.4)
+                \item Bolt ultimate tensile strength $f_{uf} = \underline{\hspace{2cm}}$ MPa (Table 9.3.1)
+                \item Bolt tensile stress area $A_s = \underline{\hspace{2cm}}$ mm$^2$
+                \item Bolt shear area (core $A_c$ or shank $A_o$) = $\underline{\hspace{2cm}}$ mm$^2$
+            \end{itemize}
+    \end{itemize}
+\end{tcolorbox}
+<BR>
+\begin{notebox}
+For a group of bolts, you must first determine the actions on the most critically loaded bolt before using this workflow. For a simple concentric load, this is just the total load divided by the number of bolts. For an eccentric load, you may need to perform a separate analysis.
+\end{notebox}
+
+\subsubsection*{Step 1: Calculate the Design SHEAR Capacity per bolt ($\phi V_f$)}
+\begin{itemize}
+    \item \textbf{Formula (Clause 9.3.2.1):} $\phi V_f = \phi (0.62 f_{uf} A_{eff} k_r)$
+    \item Assume $k_r=1.0$ for standard connections.
+    \item $\phi V_f = (0.8) \times (0.62) \times (\underline{\hspace{2cm}}\,\text{MPa}) \times (\underline{\hspace{2cm}}\,\text{mm}^2) \times (1.0)$
+    \item $\phi V_f = \underline{\hspace{4cm}}$ kN
+\end{itemize}
+
+\subsubsection*{Step 2: Calculate the Design TENSION Capacity per bolt ($\phi N_{tf}$)}
+\begin{itemize}
+    \item \textbf{Formula (Clause 9.3.2.2):} $\phi N_{tf} = \phi A_s f_{uf}$
+    \item $\phi N_{tf} = (0.8) \times (\underline{\hspace{2cm}}\,\text{mm}^2) \times (\underline{\hspace{2cm}}\,\text{MPa})$
+    \item $\phi N_{tf} = \underline{\hspace{4cm}}$ kN
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART B: COMBINED ACTION CHECK
+%----------------------------------------------------------------------------------------
+
+\subsection{Part B: Combined Action Interaction Check}
+
+\subsubsection*{Step 3: Apply the Interaction Formula (Clause 9.3.2.3)}
+\begin{itemize}
+    \item \textbf{Purpose:} To ensure that the combination of applied shear and tension does not exceed the bolt's capacity.
+    \item \textbf{Formula (Elliptical Interaction):}
+        \[ \left( \frac{V_f^*}{\phi V_f} \right)^2 + \left( \frac{N_{tf}^*}{\phi N_{tf}} \right)^2 \le 1.0 \]
+    \item \textbf{Calculation:}
+        \begin{align*}
+            \text{Shear Ratio} &= \frac{V_f^*}{\phi V_f} = \frac{\underline{\hspace{2.5cm}}}{\underline{\hspace{2.5cm}}} = \underline{\hspace{2.5cm}} \\
+            \text{Tension Ratio} &= \frac{N_{tf}^*}{\phi N_{tf}} = \frac{\underline{\hspace{2.5cm}}}{\underline{\hspace{2.5cm}}} = \underline{\hspace{2.5cm}} \\
+            \text{Interaction Value} &= (\text{Shear Ratio})^2 + (\text{Tension Ratio})^2 \\
+            &= (\underline{\hspace{2cm}})^2 + (\underline{\hspace{2cm}})^2 = \underline{\hspace{2.5cm}}
+        \end{align*}
+\end{itemize}
+
+%----------------------------------------------------------------------------------------
+%   PART C: FINAL CONCLUSION
+%----------------------------------------------------------------------------------------
+
+\subsection{Part C: Final Conclusion for the Bolt in Combined Action}
+\begin{finalbox}{violet}
+The bolt is adequate if the interaction value from the combined check is less than or equal to 1.0.
+\begin{itemize}
+    \item Interaction Value = \underline{\hspace{3cm}}
+\end{itemize}
+\textbf{Check: Is the Interaction Value $\le 1.0$? \quad \underline{YES / NO}} \\
+\textbf{Conclusion: The bolt \underline{IS / IS NOT} adequate for the combined actions.}
+\end{finalbox}
+
+\newpage
+
+%========================================================================================
+%   END OF SECTION 8
+%========================================================================================
+
+\end{document}
