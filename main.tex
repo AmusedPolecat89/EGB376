@@ -1,4 +1,12 @@
 %========================================================================================
+% Version: v1.0
+% Course: EGB376 – Steel Structures
+% Standard: AS 4100 (teaching-level use)
+% Intended use: Open-book exams and revision
+% Last updated: 2025
+%========================================================================================
+
+%========================================================================================
 %   PREAMBLE: PACKAGES AND DOCUMENT SETUP
 %========================================================================================
 
@@ -12,6 +20,7 @@
 \usepackage{amssymb}        % For math symbols (e.g., \le)
 \usepackage{xcolor}         % For defining and using colors
 \usepackage{hyperref}       % For creating clickable links (e.g., in the ToC)
+\usepackage{microtype}      % Better line breaking/kerning (helps prevent overfull lines)
 \usepackage{pifont}         % For Zapf Dingbats symbols, like arrows
 
 %----------------------------------------------------------------------------------------
@@ -37,11 +46,19 @@
 }
 
 %----------------------------------------------------------------------------------------
+%   GLOBAL LINE-BREAK SAFETY (prevents content spilling into margins)
+%----------------------------------------------------------------------------------------
+% Allows TeX a bit more flexibility to avoid overfull hboxes (text running off the page)
+\setlength{\emergencystretch}{2em}
+
+%----------------------------------------------------------------------------------------
 %   CUSTOM TCOLORBOX STYLES
 %----------------------------------------------------------------------------------------
 
 % Box for high-level strategic advice
 \newtcolorbox{strategybox}{
+    enhanced,
+    breakable,
     colback=gray!5!white,
     colframe=gray!60!black,
     fonttitle=\bfseries,
@@ -50,6 +67,8 @@
 
 % Box for critical decision points in the workflow
 \newtcolorbox{decisionbox}{
+    enhanced,
+    breakable,
     colback=green!5!white,
     colframe=green!50!black,
     fonttitle=\bfseries,
@@ -58,6 +77,8 @@
 
 % Box for important notes, warnings, and common pitfalls
 \newtcolorbox{notebox}{
+    enhanced,
+    breakable,
     colback=yellow!10!white,
     colframe=yellow!80!black,
     fonttitle=\bfseries,
@@ -66,6 +87,8 @@
 
 % Box for final answers, themed with a custom color
 \newtcolorbox{finalbox}[2][]{
+    enhanced,
+    breakable,
     colback=#2!5!white,
     colframe=#2!75!black,
     fonttitle=\bfseries,
@@ -85,6 +108,8 @@
 
 % "DO THIS NOW" action box
 \newtcolorbox{dobox}{
+    enhanced,
+    breakable,
     colback=blue!4!white,
     colframe=blue!60!black,
     fonttitle=\bfseries,
@@ -93,6 +118,8 @@
 
 % Tick-checklist box
 \newtcolorbox{checklistbox}{
+    enhanced,
+    breakable,
     colback=gray!6!white,
     colframe=gray!60!black,
     fonttitle=\bfseries,
@@ -101,6 +128,8 @@
 
 % Sanity check box (catch stupid mistakes)
 \newtcolorbox{sanitybox}{
+    enhanced,
+    breakable,
     colback=orange!8!white,
     colframe=orange!80!black,
     fonttitle=\bfseries,
@@ -109,6 +138,8 @@
 
 % Answer template box
 \newtcolorbox{answerbox}{
+    enhanced,
+    breakable,
     colback=green!6!white,
     colframe=green!60!black,
     fonttitle=\bfseries,
@@ -153,6 +184,10 @@
 \hrule
 \vspace{1em}
 This document is an interactive, step-by-step procedure to solve steel design problems according to AS 4100. It is designed as a plug-and-play checklist for open-book assessments. Start every problem with the Master Decision Tree in Section 2.
+
+\textit{For usage instructions and disclaimers, see the README.md in the repository.}
+
+\textit{This document is a study aid and workflow guide, not a replacement for the AS 4100 Standard.}
 \vspace{1em}
 \tableofcontents
 
@@ -161,7 +196,8 @@ This document is an interactive, step-by-step procedure to solve steel design pr
 %----------------------------------------------------------------------------------------
 %   SECTION 0.5: ADVANCED LOAD ANALYSIS (UNNUMBERED - DOES NOT SHIFT SECTION NUMBERS)
 %----------------------------------------------------------------------------------------
-\section*{Advanced Load Analysis: Patterns \& Combinations}
+\section*{Advanced Load Analysis: Patterns \& Combinations}\label{sec:load_patterns}
+\phantomsection
 \addcontentsline{toc}{section}{Advanced Load Analysis: Patterns \& Combinations}
 \begin{strategybox}
 Before calculating capacity, find the worst-case Design Action ($S^*$). For continuous beams, use \textbf{pattern loading}.
@@ -196,7 +232,9 @@ Before calculating capacity, find the worst-case Design Action ($S^*$). For cont
 \begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, fonttitle=\bfseries, title=Your Problem-Solving Process]
 For every exam question, follow this exact procedure:
 \begin{enumerate}
-    \item \textbf{Start at the Master Decision Tree (Section 2).} Answer the questions to identify the correct workflow for your problem.
+    \item \textbf{Start at the Master Decision Tree.} Answer the questions to identify the correct workflow for your problem.
+    
+    \textbf{Go to} \hyperref[sec:master]{Section \ref{sec:master}: \nameref{sec:master}}.
     \item \textbf{Go to the indicated workflow section.}
     \item \textbf{Follow the steps and decision points within that workflow.} Fill in the blanks as you go.
     \item This process ensures you never miss a critical check.
@@ -204,7 +242,7 @@ For every exam question, follow this exact procedure:
 \end{tcolorbox}
 
 \vspace{0.5em}
-\section*{Question Decoder (60-second triage)}
+\section*{Question Decoder (60-second triage)}\label{sec:decoder}
 \begin{strategybox}
 Use this decoder to translate exam wording into \textbf{(i)} what you must produce, \textbf{(ii)} which limit state you are in, and \textbf{(iii)} the workflow section to use. Read the question once, then fill the outputs below.
 \end{strategybox}
@@ -246,18 +284,20 @@ Use this decoder to translate exam wording into \textbf{(i)} what you must produ
 \end{itemize}
 \end{decisionbox}
 
-\begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, fonttitle=\bfseries, title=Keyword $\rightarrow$ Workflow Map (fast navigation)]
+\begin{tcolorbox}[colback=gray!5, colframe=gray!50!black, fonttitle=\bfseries, title=Fast Index (quick jump---use the Master Decision Tree for full routing)]
 \renewcommand{\arraystretch}{1.25}
-\begin{tabularx}{\textwidth}{@{}X X l@{}}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.32\textwidth} >{\raggedright\arraybackslash}p{0.38\textwidth} >{\raggedright\arraybackslash}p{0.22\textwidth}@{}}
 \textbf{If the prompt looks like...} & \textbf{Your first move is...} & \textbf{Go to} \\
 \hline
-Axial tension member / tie / plate in tension; net area, block shear, fracture & Compute $N^*$ then check member + connection (weakest link governs) & Sec. 3 \\
-Column / strut / compression member; buckling, slenderness, effective area & Compute $N^*$; check section capacity + member buckling & Sec. 4 \\
-Beam; bending + shear + web bearing; LTB / unbraced length & Compute $M^*, V^*$; check bending then shear then web local checks & Sec. 5 \\
-Beam-column; combined $N^*$ and $M^*$; interaction check & Gather pure capacities first, then apply interaction checks & Sec. 6 \\
-Eccentric welded bracket/plate; weld group under shear + moment & Resolve direct + torsional shear in weld group; check resultant vs capacity & Sec. 7 \\
-Bolts in tension and shear; combined action on most critical bolt & Compute per-bolt actions; check shear, tension, then interaction & Sec. 8 \\
+Axial tension member / tie / plate in tension; net area, block shear, fracture & Compute $N^*$ then check member + connection (weakest link governs) & \hyperref[sec:tension]{Sec.\ \ref{sec:tension}: Tension} \\
+Column / strut / compression member; buckling, slenderness, effective area & Compute $N^*$; check section capacity + member buckling & \hyperref[sec:compression]{Sec.\ \ref{sec:compression}: Compression} \\
+Beam; bending + shear + web bearing; LTB / unbraced length & Compute $M^*, V^*$; check bending then shear then web local checks & \hyperref[sec:flexure]{Sec.\ \ref{sec:flexure}: Flexure} \\
+Beam-column; combined $N^*$ and $M^*$; interaction check & Gather pure capacities first, then apply interaction checks & \hyperref[sec:beamcolumn]{Sec.\ \ref{sec:beamcolumn}: Beam-Column} \\
+Eccentric welded bracket/plate; weld group under shear + moment & Resolve direct + torsional shear in weld group; check resultant vs capacity & \hyperref[sec:eccweld]{Sec.\ \ref{sec:eccweld}: Ecc.\ Welds} \\
+Bolts in tension and shear; combined action on most critical bolt & Compute per-bolt actions; check shear, tension, then interaction & \hyperref[sec:bolts]{Sec.\ \ref{sec:bolts}: Bolts} \\
 \end{tabularx}
+\normalsize
 \end{tcolorbox}
 
 \begin{notebox}
@@ -274,10 +314,10 @@ Bolts in tension and shear; combined action on most critical bolt & Compute per-
 \section{Fundamentals of Limit States Design}
 
 \begin{notebox}
-\textbf{Quick Reference Constants:}
+\textbf{Quick-Reference Constants:}
 \begin{itemize}
     \item Capacity Factors: \textbf{See Table 3.4.} (Depends on the limit state and connection category.) Commonly, $\phi = 0.9$ for many member checks and $\phi = 0.8$ for bolts and SP welds.
-    \item Material Properties: Steel Density $\rho = 7850$ kg/m$^3$, $E = 200,000$ MPa, $G = 80,000$ MPa.
+    \item Material Properties: Steel Density $\rho = 7850$ kg/m$^3$, $E = 200,000$ MPa, $G_s = 80,000$ MPa.
 \end{itemize}
 \end{notebox}
 \begin{notebox}
@@ -296,7 +336,7 @@ Structural design ensures safety against uncertain loads and material strengths.
     \item \textbf{Load Factors ($\gamma$):} We \textbf{increase} the specified loads (G, Q, W) to get a conservative "Design Action Effect" ($S^*$). This accounts for potential \textbf{overloading}.
     \item \textbf{Capacity Reduction Factors ($\phi$):} We \textbf{decrease} the theoretical strength of a member to get a "Design Capacity" ($\phi R$). This accounts for potential \textbf{under-strength} and variability.
 \end{enumerate}
-The structure is safe if the factored action is less than or equal to the factored capacity.
+The structure is safe if the factored action is less than or equal to the factored capacity:
 \end{strategybox}
 
 \subsection*{The Core Design Equation}
@@ -309,29 +349,9 @@ Before using any workflow, you must determine the target load ($N^*, M^*, V^*$) 
 
 \subsubsection{Strength Limit State Load Combinations (AS/NZS 1170.0)}
 \begin{notebox}
-For any strength problem (checking capacity for yielding, fracture, buckling), you must test all relevant load combinations and use the one that produces the \textbf{WORST} (i.e., largest) design action effect.
-\end{notebox}
-\begin{itemize}
-    \item \textbf{For Downward Gravity Loads (most common case):}
-        \[ S^* = 1.2G + 1.5Q \]
-        Where: $G$ = Permanent Action (Dead Load), $Q$ = Imposed Action (Live Load).
-
-    \item \textbf{For Wind Uplift or Reversal (when wind opposes gravity):}
-        \[ S^* = 0.9G + W_u \]
-        Where: $W_u$ = Ultimate Wind Action.
-
-    \item \textbf{Permanent action dominant (G-only ULS case, if applicable):}
-        \[ S^* = 1.35G \]
-        \textit{Used only when variable actions are absent or demonstrably negligible for the limit state under consideration.}
-        
-        \textit{Note: Many "stability" questions actually mean uplift/overturning/sliding, where reduced $G$ and destabilising actions govern.}
-        
-    \item \textbf{For Gravity with Wind (downwards):}
-        \[ S^* = 1.2G + W_u + \psi_c Q \]
-        Where $\psi_c$ is the combination factor for the imposed action.
-\end{itemize}
-\begin{notebox}
-\textbf{Do not guess combos:} Use AS/NZS 1170.0 combination sets relevant to the action \textbf{and direction}; check uplift/overturning separately.
+All load combinations and pattern loading rules are defined in
+\hyperref[sec:load_patterns]{Advanced Load Analysis: Patterns \& Combinations}.
+Do not duplicate or guess combinations — refer to that section as the single source of truth.
 \end{notebox}
 
 \subsubsection{Serviceability Limit State (Checks for Deflection, Vibration)}
@@ -366,52 +386,145 @@ Serviceability is about performance and comfort, not collapse. We use \textbf{un
 %   SECTION 2: MASTER DECISION TREE
 %========================================================================================
 
-\section{Master Decision Tree: START EVERY PROBLEM HERE}
+\section{Master Decision Tree: START EVERY PROBLEM HERE}\label{sec:master}
 
 \begin{strategybox}
-Every steel design problem can be categorized by the primary actions on the member and the limit state being checked. This decision tree is a triage system. Read the exam question carefully, then answer the questions below to find the exact workflow you need to solve it.
+This section is your \textbf{triage hub}. Use it to identify (1) the \textbf{limit state}, (2) whether the question is about a \textbf{member, connection, or full system}, and (3) the governing \textbf{actions} ($N^*, M^*, V^*$) so you can jump to the correct workflow fast.
 \end{strategybox}
 
 \begin{decisionbox}
-\textbf{1. What is the PRIMARY action the member is designed for?}
+\textbf{0. What are you being asked to do? (Verb Decoder)}
+\begin{itemize}
+    \item \textbf{IF} the question says \textbf{``check / verify / adequate? / PASS-FAIL''}:
+        \begin{itemize}
+            \item[\ding{226}] Do an \textbf{adequacy check}: compute $S^*$ then compare to $\phi R$.
+        \end{itemize}
+    \item \textbf{IF} the question says \textbf{``calculate capacity / determine maximum / find $\phi R$''}:
+        \begin{itemize}
+            \item[\ding{226}] Do a \textbf{capacity calculation}: compute governing $\phi R$ (often multiple checks, take minimum).
+        \end{itemize}
+    \item \textbf{IF} the question says \textbf{``select / design / size / number of bolts / weld size''}:
+        \begin{itemize}
+            \item[\ding{226}] Do a \textbf{sizing problem}: choose member/connection so capacity $\ge$ demand, then justify.
+        \end{itemize}
+\end{itemize}
+
+\vspace{0.75em}\hrule\vspace{0.75em}
+
+\textbf{1. Which limit state are you in? (Loads)}
+\begin{itemize}
+    \item \textbf{IF} the question mentions \textbf{yielding, buckling, fracture, ultimate, collapse}:
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Strength (ULS)}: use factored combinations to find worst $N^*, M^*, V^*$.
+            \item[\ding{226}] \textbf{Continuous beams / pattern loading:} If the structure is continuous, check \hyperref[sec:load_patterns]{\nameref{sec:load_patterns}} to identify the worst-case pattern.
+        \end{itemize}
+    \item \textbf{IF} the question mentions \textbf{deflection, drift, vibration, serviceability}:
+        \begin{itemize}
+            \item[\ding{226}] \textbf{Serviceability (SLS)}: use service combinations, then do \textbf{deflection} check (Section 5, Part E).
+        \end{itemize}
+\end{itemize}
+
+\vspace{0.75em}\hrule\vspace{0.75em}
+
+\begin{notebox}
+\textbf{STOP (Actions first):} Before choosing a workflow, compute the governing Design Action Effect ($S^*$) and extract the design actions ($N^*, M^*, V^*$). \textbf{No capacity checks until actions are pinned.}
+\end{notebox}
+
+\textbf{2. What is the object of design/check? (Member / Connection / System)}
+\begin{itemize}
+    \item \textbf{IF} the question is about a \textbf{member adequacy/capacity} (a beam/column/tie):
+        \begin{itemize}
+            \item[\ding{226}] Go to Step 3 (Primary action on the member).
+        \end{itemize}
+    \item \textbf{IF} the question is about a \textbf{connection detail only} (bolt group / weld group / bracket):
+        \begin{itemize}
+            \item[\ding{226}] Skip to Step 5 (Connection-only workflows).
+        \end{itemize}
+    \item \textbf{IF} it is a \textbf{tension system/splice} or a member + connection question:
+        \begin{itemize}
+            \item[\ding{226}] You must check \textbf{BOTH} member and connection (weakest link governs).
+        \end{itemize}
+\end{itemize}
+
+\vspace{0.75em}\hrule\vspace{0.75em}
+
+\textbf{3. What are the PRIMARY actions on the MEMBER?} \\
+\textit{Choose based on the demand you must check (from $N^*, M^*, V^*$), not the member name in the question.}
 
 \begin{itemize}
     \item \textbf{IF} the member is primarily resisting \textbf{Axial Tension} (being pulled apart by a force $N^*$), and the question asks for its design capacity...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 3: Tension System Workflow}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:tension]{Section \ref{sec:tension}: \nameref{sec:tension}}
         \end{itemize}
 
     \item \textbf{IF} the member is primarily resisting \textbf{Axial Compression} (a column being squashed by a force $N^*$), and the question asks for its design capacity...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 4: Compression Member Workflow}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:compression]{Section \ref{sec:compression}: \nameref{sec:compression}}
         \end{itemize}
 
     \item \textbf{IF} the member is primarily resisting \textbf{Bending} (a beam supporting transverse loads, creating a moment $M^*$), and the question asks for its capacity or adequacy...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 5: Flexural System (Beam) Workflow}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:flexure]{Section \ref{sec:flexure}: \nameref{sec:flexure}}
         \end{itemize}
 
     \item \textbf{IF} the member is resisting both \textbf{Axial Compression AND Bending} simultaneously (a beam-column with forces $N^*$ and $M^*$), and the question asks for its adequacy...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 6: Combined Actions (Beam-Column) Workflow}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:beamcolumn]{Section \ref{sec:beamcolumn}: \nameref{sec:beamcolumn}}
+        \end{itemize}
+
+    \item \textbf{IF} the member has significant \textbf{shear and local web actions} (reactions/point loads) in addition to bending...
+        \begin{itemize}
+            \item[\ding{226}] In Section 5, do \textbf{ALL} of: bending + shear + web bearing/buckling (and stiffeners if needed).
         \end{itemize}
 \end{itemize}
 
-\vspace{1em}\hrule\vspace{1em}
+\vspace{0.75em}\hrule\vspace{0.75em}
 
-\textbf{2. Is the question ONLY about a complex connection detail?}
+\textbf{4. Special flags that change the workflow (don’t miss easy marks)}
+\begin{itemize}
+    \item \textbf{Slender / built-up / custom welded section:} you may need effective properties ($A_e, I_{eff}, Z_e$) -- do not blindly use tables.
+    \item \textbf{Unbraced compression flange / LTB wording / restraint notes:} LTB may govern (Section 5, Step 2a--3).
+    \item \textbf{Splice plates:} treat splice plates as members too; check their yielding/net fracture/block shear (Section 3 note).
+    \item \textbf{Stability / uplift / overturning:} treat as a separate load direction case (often reduced $G$ with wind).
+    \item \textbf{Eccentricity / offset load:} create a moment on the connection group ($T^* = V^* e$ or $M^* = N^* e$).
+    \item \textbf{Holes in a tension flange/web (service holes):} check net section / block shear / local tearing where relevant.
+    \item \textbf{Torsion / warping / fatigue / fire:} these can be assessed in steel design, but are not the focus of this checklist. If they appear, follow the question’s stated clause/method and write assumptions clearly.
+\end{itemize}
+
+\vspace{0.75em}\hrule\vspace{0.75em}
+
+\textbf{5. Connection-only workflows (when the question is purely about the detail)}
 
 \begin{itemize}
     \item \textbf{IF} the question shows a bracket or plate eccentrically \textbf{welded} to a column and asks for the adequacy of the weld...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 7: Advanced Connection --- Eccentric Welds}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:eccweld]{Section \ref{sec:eccweld}: \nameref{sec:eccweld}}
         \end{itemize}
 
     \item \textbf{IF} the question shows a \textbf{bolted} connection resisting pure Tension ($N_{tf}^*$) or a combination of Tension and Shear ($N_{tf}^*$ and $V_f^*$), and asks for the adequacy of the bolts...
         \begin{itemize}
-            \item[\ding{226}] \textbf{Go to Section 8: Advanced Connection --- Bolts in Tension \& Combined Action}
+            \item[\ding{226}] \textbf{Go to} \hyperref[sec:bolts]{Section \ref{sec:bolts}: \nameref{sec:bolts}}
         \end{itemize}
+
+    \item \textbf{IF} the connection is \textbf{simple bolt shear/bearing} (no combined tension) inside a tension system problem...
+        \begin{itemize}
+            \item[\ding{226}] Stay in Section 3 Part B (connection checks as part of the system).
+        \end{itemize}
+
+    \item \textbf{Trap rule:} If the question includes a \textbf{member} \textit{and} a connection/detail sketch, assume you must check \textbf{both} unless it explicitly says ``connection only''.
 \end{itemize}
+
+\vspace{0.75em}\hrule\vspace{0.75em}
+
+\begin{tcolorbox}[colback=green!6!white, colframe=green!60!black, fonttitle=\bfseries, title=Decision Output (write this before you turn the page), enhanced, breakable]
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\textbf{Verb type:} & \blank{10cm} \quad (Check / Capacity / Size) \\
+\textbf{Limit state:} & \blank{10cm} \quad (ULS / SLS) \\
+\textbf{Object:} & \blank{10cm} \quad (Member / Connection / System) \\
+\textbf{Design actions to compute:} & \blank{10cm} \quad ($N^*, M^*, V^*$) \\
+\textbf{Workflow selected:} & \blank{10cm} \quad (linked section title) \\
+\end{tabularx}
+\end{tcolorbox}
 \end{decisionbox}
 
 \newpage
@@ -424,7 +537,7 @@ Every steel design problem can be categorized by the primary actions on the memb
 %   SECTION 3: TENSION SYSTEM WORKFLOW
 %========================================================================================
 
-\section{Tension System Workflow ($N^* \le \phi N_{system}$)}
+\section{Tension System Workflow ($N^* \le \phi N_{system}$)}\label{sec:tension}
 
 \begin{strategybox}
 A tension system can fail in two places: in the main body of the member, or at the connection. The true capacity of the system is the \textbf{weakest link} in this chain. This workflow ensures you check all possible failure modes for both the member and its connection to find the governing capacity.
@@ -648,7 +761,7 @@ To find the design capacity of the entire system, compare the governing member c
 %   SECTION 4: COMPRESSION MEMBER WORKFLOW
 %========================================================================================
 
-\section{Compression Member Workflow ($N^* \le \phi N_c$)}
+\section{Compression Member Workflow ($N^* \le \phi N_c$)}\label{sec:compression}
 
 \begin{strategybox}
 A compression member (column) can fail in two distinct ways. A short, stocky column will crush under load (\textbf{Section Capacity}). A long, slender column will bend and buckle sideways before it reaches its crush strength (\textbf{Member Capacity}). The design capacity is always the \textbf{LOWER} of these two values.
@@ -695,7 +808,7 @@ where $A_e$ is the \textbf{effective area}. $A_e = A_g$ \textbf{only if} the sec
             \item Capacity Factor (Compression) $\phi = 0.9$ (Table 3.4)
             \item Yield Stress $f_y = \underline{\hspace{2cm}}$ MPa (If multiple grades, use the \textbf{lowest} $f_y$ for the global capacity calc $N_s$.)
             \item \textit{Note: For Local Buckling ($\lambda_e$), check each element using its OWN $f_y$.}
-            \item Net Area $A_n = \underline{\hspace{2cm}}$ mm$^2$ \quad \textit{(If no holes: $A_n = A_g$. Do not reduce area unless holes exist.)}
+            \item Gross Area $A_g = \underline{\hspace{2cm}}$ mm$^2$ \quad \textit{(Net area $A_n$ is only relevant if holes exist.)}
             \item \textit{Slender plates: use $A_e$ (effective area) in CHECK 1, not $A_n$ or $A_g$.}
             \item Form Factor $k_f = \underline{\hspace{2cm}}$ (Clause 6.2.2 - this is 1.0 for compact sections)
             \item Radii of Gyration: $r_x = \underline{\hspace{2cm}}$ mm, $r_y = \underline{\hspace{2cm}}$ mm
@@ -755,8 +868,8 @@ A column always buckles about its most slender axis. Calculate the slenderness r
             \item x-axis: $l_{ex}/r_x = (\underline{\hspace{2.5cm}}) / (\underline{\hspace{2cm}}) = \underline{\hspace{2cm}}$
             \item y-axis: $l_{ey}/r_y = (\underline{\hspace{2.5cm}}) / (\underline{\hspace{2cm}}) = \underline{\hspace{2cm}}$
         \end{itemize}
-    \item \textbf{Multiple Restraints:} If the column has intermediate braces (e.g., at 3m, 6m), it divides into segments. Calculate $l_e/r$ for \textbf{each segment} (using local $L$ and local $k_e$) and use the \textbf{maximum} value found.
-    \item \textbf{Restraint Force:} To count as a valid restraint, a brace must be able to resist $2.5\%$ of the axial force in the column ($N^*$).
+    \item \textbf{Multiple Restraints:} If the column has intermediate braces (e.g., at 3 m, 6 m), it divides into segments. Calculate $l_e/r$ for \textbf{each segment} (using local $L$ and local $k_e$) and use the \textbf{maximum} value found.
+    \item \textbf{Restraint Force:} To count as a valid restraint, a brace must be able to resist 2.5\% of the axial force in the column ($N^*$).
 \end{itemize}
 \textbf{The governing (larger) slenderness ratio is \underline{\hspace{2.5cm}}. Use the corresponding $l_e$ and $r$ values for all subsequent calculations.}
 \end{decisionbox}
@@ -776,7 +889,7 @@ A column always buckles about its most slender axis. Calculate the slenderness r
                 \begin{itemize}
                     \item Hot Rolled (RHS, SHS, UB): SR or HR columns.
                     \item Welded (Box, I-beam): LW (Light) or HW (Heavy).
-                    \item \textbf{Exam Tip:} Unless ``Stress Relieved'', assume HW for thick welded plates ($>16$mm) or complex shapes.
+                    \item \textbf{Exam Tip:} Unless ``Stress Relieved'', assume HW for thick welded plates ($>16$ mm) or complex shapes.
                     \item \textbf{Modification Warning:} If you weld plates to a Hot Rolled section (retrofit), it becomes a \textbf{Welded Section} (HW or LW). You lose the favorable ``Hot Rolled'' buckling curve.
                 \end{itemize}
             \item Calculate intermediate factor $\eta$ (eta):
@@ -839,7 +952,7 @@ The design compression capacity is the lesser of the section (crushing) capacity
 %   SECTION 5: FLEXURAL SYSTEM (BEAM) WORKFLOW
 %========================================================================================
 
-\section{Flexural System (Beam) Workflow}
+\section{Flexural System (Beam) Workflow}\label{sec:flexure}
 
 \begin{strategybox}
 A beam must be checked for three primary failure modes:
@@ -955,7 +1068,7 @@ Is the beam segment under consideration \textbf{fully braced} against sideways m
 \begin{itemize}
     \item \textbf{a) Determine Effective Length ($l_e$):} $l_e = k_t k_l k_r L$. Use Tables 5.6.3(1-3).
         \begin{itemize}
-            \item $L$ (length between braces) = $\underline{\hspace{2cm}}$ mm. $l_e = \underline{\hspace{3cm}}$ mm.
+            \item $L$ (length between braces) $= \underline{\hspace{2cm}}$ mm. $l_e = \underline{\hspace{3cm}}$ mm.
             \item \textbf{Load Height ($k_l$):} ``Load on Top Flange'' is \textbf{destabilizing} ($k_l=1.4$) for gravity beams; \textbf{stabilizing} ($k_l<1.0$) for cantilevers (load on tension side). Check Table 5.6.3.
             \item \textbf{Continuous Beams (Hogging Support):}
                 \begin{itemize}
@@ -1072,21 +1185,21 @@ For most problems, Web Bearing (Yielding) is the main check required unless the 
 If Web Bearing fails, add stiffeners. They act as a cruciform column.
 \end{strategybox}
 \begin{itemize}
-    \item \textbf{Effective Web Length:} The stiffeners recruit a strip of web: $L_{web} \approx 25 t_w$ (or check specific clause).
-    \item \textbf{Total Area ($A_s$):} Area of stiffeners + area of effective web.
-    \item \textbf{Capacity:} Treat as a compression member (Section 4). $L_e \approx 0.7 d_1$ (often used).
-    \item \textbf{Weld Design:} The weld must transfer load from stiffener to web. Design force $\approx N^* \times (A_{stiff} / A_{total})$.
-\item \textbf{Next:} After sizing stiffeners and welds, re-check Part C local web checks, then proceed to Part E and Part F.
+    \item \textbf{Effective Web Length:} The stiffeners recruit a strip of web: $L_{web} \approx 25\,t_w$ (or check specific clause).
+    \item \textbf{Total Area ($A_s$):} Area of stiffeners $+$ area of effective web.
+    \item \textbf{Capacity:} Treat as a compression member (Section 4). $L_e \approx 0.7\,d_1$ (often used).
+    \item \textbf{Weld Design:} The weld must transfer load from stiffener to web. Design force $\approx N^* \times (A_{\text{stiff}} / A_{\text{total}})$.
+    \item \textbf{Next:} After sizing stiffeners and welds, recheck Part C local web checks, then proceed to Part E and Part F.
 \end{itemize}
 
 \subsection{Part E: Serviceability (Deflection) Checks}
 \begin{strategybox}
-Serviceability checks use \textbf{service/unfactored} combinations. Deflection limits depend on the problem statement; if not given, use common limits (e.g., $L/250$ to $L/360$ for floors/roofs). \textbf{If not specified, state the assumed limit clearly before checking} (markers like seeing the assumption written).
+Serviceability checks use \textbf{service/unfactored} combinations. Deflection limits depend on the problem statement; if not given, use common limits (e.g., $L/250$ to $L/360$ for floors/roofs). \textbf{If not specified, state the assumed limit clearly before checking} (markers like to see the assumption written).
 \end{strategybox}
 \begin{itemize}
     \item \textbf{Step 1:} Determine service load (e.g., $G + Q$) and span $L$.
-    \item \textbf{Step 2:} Compute maximum deflection $\delta_{max}$ using appropriate formula.
-    \item \textbf{Step 3:} Check $\delta_{max} \le \delta_{allow}$ (e.g., $\delta_{allow} = L/250$).
+    \item \textbf{Step 2:} Compute maximum deflection $\delta_{\max}$ using appropriate formula.
+    \item \textbf{Step 3:} Check $\delta_{\max} \le \delta_{\text{allow}}$ (e.g., $\delta_{\text{allow}} = L/250$).
     \item \textbf{Next:} Proceed to Part F (Final Conclusion).
 \end{itemize}
 
@@ -1097,7 +1210,7 @@ To be adequate, the beam must satisfy all relevant checks.
     \item Bending Check: $M^* = \underline{\hspace{2cm}}$ kNm $\le \phi M_b = \underline{\hspace{2cm}}$ kNm \quad (\textbf{PASS / FAIL})
     \item Shear Check: $V^* = \underline{\hspace{2cm}}$ kN $\le \phi V_u = \underline{\hspace{2cm}}$ kN \quad (\textbf{PASS / FAIL})
     \item Web Bearing Check: $R^* = \underline{\hspace{2cm}}$ kN $\le \phi R_{by} = \underline{\hspace{2cm}}$ kN \quad (\textbf{PASS / FAIL})
-    \item Serviceability (Deflection) Check: $\delta_{max} = \underline{\hspace{2cm}}$ mm $\le \delta_{allow} = \underline{\hspace{2cm}}$ mm \quad (\textbf{PASS / FAIL})
+    \item Serviceability (Deflection) Check: $\delta_{\max} = \underline{\hspace{2cm}}$ mm $\le \delta_{\text{allow}} = \underline{\hspace{2cm}}$ mm \quad (\textbf{PASS / FAIL})
 \end{itemize}
 \textbf{Overall Conclusion: The beam \underline{IS / IS NOT} adequate.}
 \end{finalbox}
@@ -1135,7 +1248,7 @@ To be adequate, the beam must satisfy all relevant checks.
 %   SECTION 6: COMBINED ACTIONS (BEAM-COLUMN) WORKFLOW
 %========================================================================================
 
-\section{Combined Actions (Beam-Column) Workflow}
+\section{Combined Actions (Beam-Column) Workflow}\label{sec:beamcolumn}
 
 \begin{strategybox}
 A beam-column is a member subjected to both axial compression ($N^*$) and bending ($M^*$) at the same time. These actions interact and reduce the member's capacity. We cannot simply check them in isolation ($N^* \le \phi N_c$ and $M^* \le \phi M_b$). Instead, we must use \textbf{interaction equations} to check that the combined effect is safe. There are two levels to this check:
@@ -1145,6 +1258,12 @@ A beam-column is a member subjected to both axial compression ($N^*$) and bendin
 \end{enumerate}
 Both checks must be satisfied for the member to be adequate.
 \end{strategybox}
+
+\begin{notebox}
+This section uses simplified interaction expressions commonly taught for exams.
+If an assessment explicitly requires a clause-based solution,
+you must use the exact AS 4100 equations instead.
+\end{notebox}
 
 \begin{checklistbox}
 \textbf{If the question says... then you MUST include...}
@@ -1340,7 +1459,7 @@ To be adequate, a beam-column must satisfy \textbf{ALL} applicable combined acti
 %   SECTION 7: ADVANCED CONNECTION --- ECCENTRIC WELDS
 %========================================================================================
 
-\section{Advanced Connection: Eccentric Welds Workflow}
+\section{Advanced Connection: Eccentric Welds Workflow}\label{sec:eccweld}
 
 \begin{strategybox}
 An eccentric load on a weld group creates two effects: a direct shear force that is distributed evenly, and a torque (moment) that creates shear forces that are highest at the points farthest from the group's center. We cannot simply add these forces. We must treat them as vectors and find the resultant force at the most critical point. The weld is adequate if this maximum resultant force (per unit length) is less than the weld's design capacity. \textbf{For web welds in beams:} the weld can resist vertical shear ($V^*$) \textbf{and} a portion of the moment ($M^*$); check resultant stress vectors.
@@ -1443,9 +1562,9 @@ The critical point is almost always one of the corners of the weld group, farthe
 \subsubsection*{Step 5: Calculate the Resultant Force per mm ($v_{res}^*$)}
 \begin{itemize}
     \item Combine the components vectorially. Pay close attention to directions (e.g., direct shear is down, torsional shear might be up or down).
-    \item Total Vertical Force: $v_{total, y}^* = v_{v,y}^* + v_{t,y}^* = \underline{\hspace{2cm}} + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
-    \item Total Horizontal Force: $v_{total, x}^* = v_{v,x}^* + v_{t,x}^* = 0 + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
-    \item \textbf{Resultant Force:} $v_{res}^* = \sqrt{(v_{total, x}^*)^2 + (v_{total, y}^*)^2} = \underline{\hspace{3cm}}$ N/mm
+    \item Total Vertical Force: $v_{\text{total},y}^* = v_{v,y}^* + v_{t,y}^* = \underline{\hspace{2cm}} + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
+    \item Total Horizontal Force: $v_{\text{total},x}^* = v_{v,x}^* + v_{t,x}^* = 0 + \underline{\hspace{2cm}} = \underline{\hspace{2.5cm}}$ N/mm
+    \item \textbf{Resultant Force:} $v_{\text{res}}^* = \sqrt{(v_{\text{total}, x}^*)^2 + (v_{\text{total}, y}^*)^2} = \underline{\hspace{3cm}}$ N/mm
 \end{itemize}
 
 %----------------------------------------------------------------------------------------
@@ -1456,10 +1575,10 @@ The critical point is almost always one of the corners of the weld group, farthe
 \begin{finalbox}{teal}
 The weld group is adequate if the maximum resultant force per unit length is less than the design capacity of the weld per unit length.
 \begin{itemize}
-    \item Maximum Resultant Force ($v_{res}^*$) = \underline{\hspace{3cm}} N/mm
+    \item Maximum Resultant Force ($v_{\text{res}}^*$) = \underline{\hspace{3cm}} N/mm
     \item Design Weld Capacity ($\phi v_w$) = \underline{\hspace{3cm}} N/mm
 \end{itemize}
-\textbf{Check: Is $v_{res}^* \le \phi v_w$? \quad \underline{YES / NO}} \\
+\textbf{Check:} Is $v_{\text{res}}^* \le \phi v_w$? \quad \underline{YES / NO} \\
 \textbf{Conclusion: The eccentric weld group \underline{IS / IS NOT} adequate.}
 \end{finalbox}
 
@@ -1467,7 +1586,7 @@ The weld group is adequate if the maximum resultant force per unit length is les
 \textbf{Weld calculation sanity:}
 \begin{itemize}
     \item Are ALL forces in N (not kN)? $1$ kN $= 1000$ N
-    \item Is $v_{res}^*$ in N/mm? (Should be hundreds, not millions)
+    \item Is $v_{\text{res}}^*$ in N/mm? (Should be hundreds, not millions)
     \item Did you use the correct $\phi$? (0.8 for SP, 0.6 for GP)
     \item Does the vector diagram make sense? (Torsional shear perpendicular to radius)
 \end{itemize}
@@ -1481,8 +1600,8 @@ The weld group is adequate if the maximum resultant force per unit length is les
     \item $I_p = $ \blank{3cm} mm$^3$
     \item Direct shear: $v_v^* = V^*/L_{total} = $ \blank{3cm} N/mm
     \item Torsional shear at critical point: $v_{t,x}^* = $ \blank{2cm}, $v_{t,y}^* = $ \blank{2cm} N/mm
-    \item Resultant: $v_{res}^* = \sqrt{v_x^2 + v_y^2} = $ \blank{3cm} N/mm
-    \item Check: $v_{res}^* = $ \blank{2cm} $\le \phi v_w = $ \blank{2cm} N/mm $\Rightarrow$ \textbf{PASS / FAIL}
+    \item Resultant: $v_{\text{res}}^* = \sqrt{v_x^2 + v_y^2} = $ \blank{3cm} N/mm
+    \item Check: $v_{\text{res}}^* = $ \blank{2cm} $\le \phi v_w = $ \blank{2cm} N/mm $\Rightarrow$ \textbf{PASS / FAIL}
 \end{enumerate}
 \end{answerbox}
 
@@ -1496,7 +1615,7 @@ The weld group is adequate if the maximum resultant force per unit length is les
 %   SECTION 8: ADVANCED CONNECTION --- BOLTS IN COMBINED ACTION
 %========================================================================================
 
-\section{Advanced Connection: Bolts in Combined Shear \& Tension}
+\section{Advanced Connection: Bolts in Combined Shear \& Tension}\label{sec:bolts}
 
 \begin{strategybox}
 Many connections, such as fin plates or brackets, subject bolts to a combination of shear ($V_f^*$) and tension ($N_{tf}^*$) simultaneously. Neither the pure shear capacity nor the pure tension capacity is sufficient on its own. We must use an \textbf{interaction formula} to check that the combined effect of these two actions is acceptable for the most critically loaded bolt.
@@ -1533,8 +1652,8 @@ Many connections, such as fin plates or brackets, subject bolts to a combination
 \subsection{Part A: Setup \& Individual Bolt Capacities}
 \begin{tcolorbox}[colback=yellow!10!white, colframe=yellow!80!black, fonttitle=\bfseries, title=Pre-Check: Geometry (Detailing Marks)]
 \begin{itemize}
-    \item Minimum Pitch: $s_{min} = 2.5 d_f$
-    \item Minimum Edge Distance: $e_{min} = 1.25 d_f$ (Machine cut) or $1.50 d_f$ (Hand cut) ($1.75 d_f$ for sheared edges).
+    \item Minimum Pitch: $s_{\min} = 2.5\,d_f$
+    \item Minimum Edge Distance: $e_{\min} = 1.25\,d_f$ (Machine cut) or $1.50\,d_f$ (Hand cut) ($1.75\,d_f$ for sheared edges).
 \end{itemize}
 \end{tcolorbox}
 \vspace{0.5em}
@@ -1565,11 +1684,11 @@ For a group of bolts, you must first determine the actions on the most criticall
     \item \textbf{Formula (Clause 9.3.2.1):} $\phi V_f = \phi (0.62 f_{uf} A_{eff} k_r)$
     \item \textbf{Determine reduction factor $k_r$:}
         \begin{itemize}
-            \item If connection length $L_j < 300$ mm, $k_r = 1.0$.
+            \item If connection length $L_j < 300\text{ mm}$, $k_r = 1.0$.
             \item $L_j$ is the \textbf{distance between bolt centers} from the first to the last bolt in the joint (along the line of load transfer).
-            \item \textit{Example:} 1 row of 2 bolts at 60 mm spacing $\Rightarrow L_j = 60$ mm.
-            \item \textit{Example:} 1 row of 10 bolts at 60 mm spacing $\Rightarrow L_j = 9 \times 60 = 540$ mm.
-            \item If $L_j > 300$ mm, calculate $k_r = 1.075 - L_j/4000$.
+            \item \textit{Example:} 1 row of 2 bolts at 60 mm spacing $\Rightarrow L_j = 60\text{ mm}$.
+            \item \textit{Example:} 1 row of 10 bolts at 60 mm spacing $\Rightarrow L_j = 9 \times 60 = 540\text{ mm}$.
+            \item If $L_j > 300\text{ mm}$, calculate $k_r = 1.075 - L_j/4000$.
         \end{itemize}
     \item $\phi V_f = (0.8) \times (0.62) \times (\underline{\hspace{2cm}}\,\text{MPa}) \times (\underline{\hspace{2cm}}\,\text{mm}^2) \times (k_r)$
     \item $\phi V_f = \underline{\hspace{4cm}}$ kN
@@ -1647,7 +1766,164 @@ The bolt is adequate if the interaction value from the combined check is less th
 
 \newpage
 \appendix
-\section{Common Beam Formulas (Quick Reference)}
+%========================================================================================
+%   APPENDIX A: DEFINITIONS OF SYMBOLS AND VARIABLES
+%========================================================================================
+
+\section{Definitions of Symbols and Variables}
+
+\begin{strategybox}
+This appendix defines all common symbols used throughout this document.
+Symbols follow standard AS 4100 conventions unless otherwise stated.
+Always check the governing clause if a question explicitly defines a symbol differently.
+\end{strategybox}
+
+\subsection*{Actions and Design Action Effects}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+$G$ & Permanent (dead) action \\
+$Q$ & Imposed (live) action \\
+$W_u$ & Ultimate wind action \\
+$W_s$ & Serviceability wind action \\
+$S^*$ & Design action effect (factored result of loads) \\
+$N^*$ & Design axial force (positive = compression unless stated) \\
+$M^*$ & Design bending moment \\
+$V^*$ & Design shear force \\
+$R^*$ & Design reaction or bearing force \\
+$e$ & Eccentricity of load from centroidal axis \\
+\end{tabularx}
+
+\subsection*{Material Properties}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+$f_y$ & Yield stress of steel \\
+$f_u$ & Ultimate tensile strength of steel \\
+$f_{yw}$ & Yield stress of web material \\
+$f_{uf}$ & Ultimate tensile strength of bolt \\
+$f_{uw}$ & Ultimate tensile strength of weld metal \\
+$E$ & Young's modulus of steel (typically 200,000 MPa) \\
+$G_s$ & Shear modulus of steel (typically 80,000 MPa) \\
+\end{tabularx}
+
+\subsection*{Geometric and Section Properties}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+$A_g$ & Gross cross-sectional area \\
+$A_n$ & Net area after holes \\
+$A_e$ & Effective area accounting for local buckling \\
+$I_x, I_y$ & Second moments of area about principal axes \\
+$I_{\text{eff}}$ & Effective second moment of area (local buckling) \\
+$r_x, r_y$ & Radii of gyration \\
+$S_x$ & Plastic section modulus \\
+$Z_{ex}$ & Effective elastic section modulus \\
+$t_w, t_f$ & Web and flange thicknesses \\
+\end{tabularx}
+
+\subsection*{Capacities and Reduction Factors}
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+$\phi$ & Capacity reduction factor \\
+$N_s$ & Nominal section compression capacity \\
+$N_c$ & Nominal member compression capacity (buckling) \\
+$M_s$ & Nominal section bending capacity \\
+$M_b$ & Nominal member bending capacity (LTB) \\
+$V_u$ & Nominal shear capacity \\
+$\alpha_c$ & Compression buckling reduction factor \\
+$\alpha_s$ & LTB reduction factor \\
+$\alpha_m$ & Moment modification factor \\
+$k_e$ & Effective length factor \\
+$k_f$ & Form factor for compression sections \\
+\end{tabularx}
+
+\newpage
+%========================================================================================
+%   APPENDIX B: SHORT-ANSWER THEORY CRIB
+%========================================================================================
+
+\section{Short-Answer Theory Crib}
+
+\begin{strategybox}
+This section provides concise, exam-ready explanations for common short-answer questions. Use full sentences where marks are allocated for explanation.
+\end{strategybox}
+
+\subsection*{Buckling and Structural Behaviour}
+\begin{itemize}
+    \item \textbf{Local buckling:} Buckling of individual plate elements; may allow post-buckling strength redistribution.
+    \item \textbf{Global buckling:} Instability of the whole member; typically brittle with little post-buckling strength.
+    \item \textbf{LTB:} Lateral movement and twist of an unbraced compression flange in bending.
+    \item \textbf{Post-buckling capacity:} Significant for local buckling, negligible for global buckling.
+\end{itemize}
+
+\subsection*{Design Concepts}
+\begin{itemize}
+    \item \textbf{Why use $\phi$ factors?} To account for material variability and modelling uncertainty.
+    \item \textbf{Why reduce capacity instead of loads?} To ensure conservative design under uncertain strength.
+    \item \textbf{Weakest link principle:} The system capacity is governed by the lowest member or connection capacity.
+\end{itemize}
+
+\subsection*{Connections}
+\begin{itemize}
+    \item \textbf{Purpose of $k_t$:} Accounts for non-uniform stress distribution in tension members.
+    \item \textbf{Block shear:} Combined tension and shear failure along a defined path near a connection.
+    \item \textbf{Prying:} Additional tension induced in bolts due to plate flexibility.
+\end{itemize}
+
+\newpage
+%========================================================================================
+%   APPENDIX C: HOW TO CONSTRUCT STRUCTURAL DIAGRAMS
+%========================================================================================
+
+\section{How to Construct Structural Diagrams (Step-by-Step)}
+
+\begin{strategybox}
+This appendix explains how to systematically construct structural diagrams
+(BMD, SFD, and axial force diagrams) using words and logic rather than sketches.
+Follow these steps before extracting design actions.
+\end{strategybox}
+
+\subsection*{Step 1: Identify the Structural System}
+\begin{itemize}
+    \item Identify supports (fixed, pinned, roller).
+    \item Identify spans, cantilevers, and continuity.
+    \item Determine whether the structure is determinate or indeterminate.
+\end{itemize}
+
+\subsection*{Step 2: Apply Loads}
+\begin{itemize}
+    \item Apply permanent loads ($G$) everywhere.
+    \item Apply variable loads ($Q$, $S$, $W$) only where they increase the effect.
+    \item For continuous members, apply pattern loading to maximise the response.
+\end{itemize}
+
+\subsection*{Step 3: Solve for Reactions}
+\begin{itemize}
+    \item Calculate support reactions before drawing any internal diagrams.
+    \item Check equilibrium: $\sum F = 0$, $\sum M = 0$.
+\end{itemize}
+
+\subsection*{Step 4: Internal Force Progression}
+\begin{itemize}
+    \item Axial force is affected only by axial loads.
+    \item Shear changes only where loads or reactions act.
+    \item Moment is the integral of shear; maximum moment occurs where shear crosses zero.
+\end{itemize}
+
+\subsection*{Step 5: Identify Design Actions}
+\begin{itemize}
+    \item Locate maximum $N^*$, $M^*$, and $V^*$.
+    \item Note whether bending is sagging or hogging.
+    \item Identify the compression flange at critical sections.
+\end{itemize}
+
+\subsection*{Step 6: Sanity Checks}
+\begin{itemize}
+    \item Zero moment at pins and rollers.
+    \item Maximum moment at fixed supports or midspan.
+    \item Diagrams must satisfy equilibrium over the entire member.
+\end{itemize}
+
+\newpage
+%========================================================================================
+%   APPENDIX D: COMMON BEAM FORMULAS
+%========================================================================================
+
+\section{Common Beam Formulas (Quick-Reference)}
 \begin{notebox}
 \textbf{Use the correct load case and boundary conditions.} These are common elastic formulas for prismatic members with constant $E I$.
 \end{notebox}
@@ -1658,23 +1934,23 @@ The bolt is adequate if the interaction value from the combined check is less th
         \end{itemize}
     \item \textbf{Simply Supported Beam, UDL $w$ over span $L$:}
         \begin{itemize}
-            \item $M_{max} = wL^2/8$, \quad $V_{max} = wL/2$
-            \item $\delta_{max} = 5wL^4/(384EI)$
+            \item $M_{\max} = wL^2/8$, \quad $V_{\max} = wL/2$
+            \item $\delta_{\max} = 5wL^4/(384EI)$
         \end{itemize}
     \item \textbf{Simply Supported Beam, Point Load $P$ at midspan:}
         \begin{itemize}
-            \item $M_{max} = PL/4$, \quad $V_{max} = P/2$
-            \item $\delta_{max} = PL^3/(48EI)$
+            \item $M_{\max} = PL/4$, \quad $V_{\max} = P/2$
+            \item $\delta_{\max} = PL^3/(48EI)$
         \end{itemize}
     \item \textbf{Cantilever, Point Load $P$ at free end:}
         \begin{itemize}
-            \item $M_{max} = PL$ (at fixed end), \quad $V_{max} = P$
-            \item $\delta_{max} = PL^3/(3EI)$
+            \item $M_{\max} = PL$ (at fixed end), \quad $V_{\max} = P$
+            \item $\delta_{\max} = PL^3/(3EI)$
         \end{itemize}
     \item \textbf{Cantilever, UDL $w$ over span $L$:}
         \begin{itemize}
-            \item $M_{max} = wL^2/2$, \quad $V_{max} = wL$
-            \item $\delta_{max} = wL^4/(8EI)$
+            \item $M_{\max} = wL^2/2$, \quad $V_{\max} = wL$
+            \item $\delta_{\max} = wL^4/(8EI)$
         \end{itemize}
 \end{itemize}
 
